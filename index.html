@@ -34,19 +34,34 @@
         Robert, votre chef vient de vous parler de ce nouveau projet. Une idée très porteuse ! Une application dont le développement avance bien, par ailleurs. Mais pas évident d'être au point niveau perf'. Pas évident de respecter les attentes avec ce bon vieil Oracle. Sans parler de l'administration... C'est pourquoi Robert est venu vous voir. 
         </p>
 
+        <h2>L'application</h2>
+        <p>
+        Vous êtes chargé de mettre en place un POC démontrant l'efficacité de Couchbase. Robert  a mis à votre disposition <a href="https://github.com/xebia-france/atelier-couchbase">la beta de l'application</a> que vous vous empressez de récupérer sur votre poste, dans le workspace de votre choix. Puis vous buildez l'application avec maven, comme à votre habitude. Cela vous permet aussi de télécharger toutes les dépendances car comme vous le savez, la connexion wifi de votre entreprise n'est pas glorieuse...
+        </p> 
+
+        <pre><code>
+    $ git clone https://github.com/xebia-france/atelier-couchbase.git
+    $ cd atelier-couchbase
+    $ mvn clean compile
+        </code></pre>
+
+        <p>
+        Vous pouvez passer au paragraphe suivant pendant le téléchargement des dépendances.
+        </p>
+
         <h2>Installation de Couchbase</h2>
         <p>
-        Robert a mis à votre disposition deux instances Amazon EC2 medium (TODO, détailler la config) tournant sous Redhat. Vous êtes chargé de mettre en place un POC démontrant l'efficacité de Couchbase.
-        </p> 
-        <p>
-        Vous vous connectez à la première instance et téléchargez la version <a href="http://packages.couchbase.com/releases/3.0.0-beta2/couchbase-server_3.0.0-beta2_x86_64_centos6.rpm">3.0.0-beta2 de couchbase</a>, puis l'installez : 
-
+        Robert a mis à votre disposition deux instances Amazon EC2 medium (TODO, détailler la config) tournant sous Redhat. Vous vous connectez à la première instance, téléchargez la version <a href="http://packages.couchbase.com/releases/3.0.0-beta2/couchbase-server_3.0.0-beta2_x86_64_centos6.rpm">3.0.0-beta2 de couchbase</a>, puis l'installez : 
         </p>
+        TODO, préciser le nom de l'instance + instructions connexion ssh.
         <pre><code>
     $ wget http://packages.couchbase.com/releases/3.0.0-beta2/couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
     $ rpm -i couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
         </code></pre>
-        <p></p>
+
+        <p>
+
+        </p>
         <h2></h2>
         <p></p>
         <h2></h2>
