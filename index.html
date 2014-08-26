@@ -59,11 +59,27 @@
     $ rpm -i couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
         </code></pre>
 
-        <p>
+        <h2>Démarrage et configuration</h2>
+        <p>Vous pouvez maintenant démarrer couchbase-server et vous connecter à la console web depuis votre machine de développement. Vous créez le bucket default avec les contraintes suivantes : </p>
 
-        </p>
-        <h2></h2>
+        <ul>
+            <li>128MO de mémoire allouée par noeud</li>
+            <li>Disable replicas</li>
+        </ul>
+
+        <p>Inutile de créer les buckets sample proposés</p>
+
+        <p>Vous créez le bucket "publicotaurus" respectant les contraintes suivantes :</p>
+        TODO, configuration du swapiness ?
         <p></p>
+        <ul>
+            <li>Bucket de type couchbase (sinon, pas de persistance !)</li>
+            <li>256MO de mémoire allouée par noeud</li>
+            <li>Enable flush</li>
+            <li>1 replica</li>
+            <li>Indices in memory</li>
+        </ul>
+
         <h2></h2>
         <p></p>
         <h2></h2>
