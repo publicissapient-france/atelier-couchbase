@@ -11,12 +11,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AppTest {
 
-    //TODO change this url to run it on your EC2 instance
-    public static final String COUCHBASE_SERVER_ADDRESS = "127.0.0.1";
-
     @Test
     public void should_get_hello_world_document() {
-        final Cluster couchbaseCluster = new CouchbaseCluster(COUCHBASE_SERVER_ADDRESS);
+        final Cluster couchbaseCluster = CouchbaseCluster.create(Configuration.COUCHBASE_ENVIRONMENT, Configuration.COUCHBASE_SERVER_ADDRESS);
         final Bucket defaultBucket = couchbaseCluster.openBucket().toBlocking().single();
         final JsonDocument testJsonDocument = defaultBucket.get("hello_couchbase").toBlocking().single();
 
