@@ -10,4 +10,5 @@ public class Configuration {
     public static final CouchbaseEnvironment COUCHBASE_ENVIRONMENT =
             DefaultCouchbaseEnvironment.builder().build();
 
+    public static final String PUBLICOTAURUS_BUCKET = "publicotaurus";
 }

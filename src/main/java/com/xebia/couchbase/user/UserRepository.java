@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import com.xebia.couchbase.Configuration;
 
 public class UserRepository {
-    public static final String PUBLICOTAURUS_BUCKET = "publicotaurus";
     private CouchbaseCluster couchbaseCluster;
     private Bucket userBucket;
     private Gson gson;
@@ -17,7 +16,7 @@ public class UserRepository {
 
     public UserRepository() {
         couchbaseCluster = CouchbaseCluster.create(Configuration.COUCHBASE_ENVIRONMENT, Configuration.COUCHBASE_SERVER_ADDRESS);
-        userBucket = couchbaseCluster.openBucket(PUBLICOTAURUS_BUCKET).toBlocking().single();
+        userBucket = couchbaseCluster.openBucket(Configuration.PUBLICOTAURUS_BUCKET).toBlocking().single();
         jsonTranscoder = new JsonTranscoder();
         gson = new Gson();
     }
