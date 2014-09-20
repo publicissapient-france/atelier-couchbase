@@ -9,6 +9,10 @@ import org.junit.Test;
 
 import java.util.Collection;
 
+import static com.xebia.couchbase.location.AddressBuilder.anAddress;
+import static com.xebia.couchbase.user.UserBuilder.anUser;
+import static com.xebia.couchbase.user.UserProfileBuilder.anUserProfile;
+
 public class UserRepositoryTest {
 
     private UserRepository userRepository;
@@ -20,9 +24,9 @@ public class UserRepositoryTest {
 
     @Test
     public void should_insert_user_in_database() throws Exception {
-        final User user = UserBuilder.anUser().withIdentifier(1L).withUserProfile(UserProfileBuilder
-                .anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
-                .withAddress(AddressBuilder.anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
+        final User user = anUser().withIdentifier(1L).withUserProfile(
+                anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
+                .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
                         .build()).build()).build();
 
         userRepository.saveUser(user);
