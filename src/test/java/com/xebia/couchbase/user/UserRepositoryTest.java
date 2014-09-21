@@ -58,7 +58,7 @@ public class UserRepositoryTest {
         try {
             userRepository.updateUser(user2);
         } catch (CASMismatchException e) {
-            //Test should be ok if test fail
+            //CASMismatchException is actually expected here
         }
         assertThat(user1.content().getObject("userProfile").get("summary")).isEqualTo("Couchbase Developer");
     }
