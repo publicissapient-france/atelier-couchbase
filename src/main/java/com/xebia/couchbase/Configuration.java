@@ -1,5 +1,6 @@
 package com.xebia.couchbase;
 
+import com.couchbase.client.java.CouchbaseCluster;
 import com.couchbase.client.java.env.CouchbaseEnvironment;
 import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
 
@@ -11,4 +12,5 @@ public class Configuration {
             DefaultCouchbaseEnvironment.builder().build();
 
     public static final String PUBLICOTAURUS_BUCKET = "publicotaurus";
+    public static final CouchbaseCluster couchbaseCluster = CouchbaseCluster.create(COUCHBASE_ENVIRONMENT, COUCHBASE_SERVER_ADDRESS);
 }

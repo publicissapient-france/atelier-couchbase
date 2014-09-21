@@ -1,7 +1,6 @@
 package com.xebia.couchbase.user;
 
 import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.CouchbaseCluster;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
 import com.couchbase.client.java.error.CASMismatchException;
@@ -14,11 +13,9 @@ public class UserRepository {
     public final Bucket userBucket;
     private final Gson gson;
     private final JsonTranscoder jsonTranscoder;
-    public final CouchbaseCluster couchbaseCluster;
 
     public UserRepository() {
-        couchbaseCluster = CouchbaseCluster.create(Configuration.COUCHBASE_ENVIRONMENT, Configuration.COUCHBASE_SERVER_ADDRESS);
-        userBucket = couchbaseCluster.openBucket(Configuration.PUBLICOTAURUS_BUCKET);
+        userBucket = Configuration.couchbaseCluster.openBucket(Configuration.PUBLICOTAURUS_BUCKET);
         jsonTranscoder = new JsonTranscoder();
         gson = new Gson();
     }
