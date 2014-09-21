@@ -32,7 +32,7 @@ public class UserRepository {
         try {
             userBucket.insert(userJsonDocument);
         } catch (CASMismatchException e) {
-            //Test should be ok if test fail
+            //Test should be ok if document has already been inserted
         }
     }
 
