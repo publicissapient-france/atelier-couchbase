@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class User {
     private UserProfile userProfile;
+    private boolean active;
 
     public UserProfile getUserProfile() {
         return userProfile;
@@ -28,6 +29,7 @@ public class User {
         User rhs = (User) obj;
         return new EqualsBuilder()
                 .append(this.userProfile, rhs.userProfile)
+                .append(this.active, rhs.active)
                 .isEquals();
     }
 
@@ -35,6 +37,15 @@ public class User {
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(userProfile)
+                .append(active)
                 .toHashCode();
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
