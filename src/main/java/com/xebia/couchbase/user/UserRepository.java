@@ -1,6 +1,5 @@
 package com.xebia.couchbase.user;
 
-import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
 import com.couchbase.client.java.error.CASMismatchException;
@@ -10,12 +9,10 @@ import com.xebia.couchbase.Configuration;
 
 public class UserRepository {
     public static final String USER_DOCUMENT_PREFIX = "user::v1::";
-    public final Bucket userBucket;
     private final Gson gson;
     private final JsonTranscoder jsonTranscoder;
 
     public UserRepository() {
-        userBucket = Configuration.couchbaseCluster.openBucket(Configuration.PUBLICOTAURUS_BUCKET);
         jsonTranscoder = new JsonTranscoder();
         gson = new Gson();
     }
@@ -27,17 +24,21 @@ public class UserRepository {
         final JsonDocument userJsonDocument = JsonDocument.create(userDocumentId, userJsonObject);
 
         try {
-            userBucket.insert(userJsonDocument);
+            Configuration.userBucket.insert(userJsonDocument);
         } catch (CASMismatchException e) {
             //Test should be ok if document has already been inserted
         }
     }
 
     public void updateUser(JsonDocument user) {
-        userBucket.replace(user);
+        Configuration.userBucket.replace(user);
     }
 
     public JsonDocument getAndLock(String userId) {
-        return userBucket.getAndLock(USER_DOCUMENT_PREFIX + userId, 5);
+        return Configuration.userBucket.getAndLock(USER_DOCUMENT_PREFIX + userId, 5);
+    }
+
+    public JsonDocument findUser(String userId) {
+        return Configuration.userBucket.get(userId);
     }
 }
