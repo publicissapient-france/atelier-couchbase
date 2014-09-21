@@ -1,7 +1,6 @@
 package com.xebia.couchbase.user;
 
 public class UserBuilder {
-    private Long identifier;
     private UserProfile userProfile;
 
     private UserBuilder() {
@@ -11,11 +10,6 @@ public class UserBuilder {
         return new UserBuilder();
     }
 
-    public UserBuilder withIdentifier(Long identifier) {
-        this.identifier = identifier;
-        return this;
-    }
-
     public UserBuilder withUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
         return this;
@@ -23,7 +17,6 @@ public class UserBuilder {
 
     public User build() {
         User user = new User();
-        user.setIdentifier(identifier);
         user.setUserProfile(userProfile);
         return user;
     }

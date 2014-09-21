@@ -22,7 +22,6 @@ public class UserReaderFromCsv {
 
     public static Collection<User> getUsersFrom(String usersFileName) {
         final ArrayList<User> users = new ArrayList<>();
-        AtomicLong idGenerator = new AtomicLong();
 
         try {
             final InputStream inputStream = UserReaderFromCsv.class.getResourceAsStream("/" + usersFileName);
@@ -30,7 +29,7 @@ public class UserReaderFromCsv {
             final Iterable<CSVRecord> lines = CSVFormat.DEFAULT.parse(inputStreamReader);
 
             for (CSVRecord line : lines) {
-                users.add(UserBuilder.anUser().withIdentifier(idGenerator.incrementAndGet())
+                users.add(UserBuilder.anUser()
                         .withUserProfile(UserProfileBuilder.anUserProfile()
                                 .withFirstName(line.get(0))
                                 .withLastName(line.get(1))
