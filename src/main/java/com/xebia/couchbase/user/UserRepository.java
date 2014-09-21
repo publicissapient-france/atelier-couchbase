@@ -11,10 +11,12 @@ public class UserRepository {
     public static final String USER_DOCUMENT_PREFIX = "user::v1::";
     private final Gson gson;
     private final JsonTranscoder jsonTranscoder;
+    private final CounterRepository counterRepository;
 
     public UserRepository() {
         jsonTranscoder = new JsonTranscoder();
         gson = new Gson();
+        counterRepository = new CounterRepository();
     }
 
     public void insertUser(User user) throws Exception {
@@ -24,21 +26,22 @@ public class UserRepository {
         final JsonDocument userJsonDocument = JsonDocument.create(userDocumentId, userJsonObject);
 
         try {
-            Configuration.userBucket.insert(userJsonDocument);
+            Configuration.PUBLICOTAURUS_BUCKET.insert(userJsonDocument);
         } catch (CASMismatchException e) {
             //Test should be ok if document has already been inserted
         }
     }
 
     public void updateUser(JsonDocument user) {
-        Configuration.userBucket.replace(user);
+        Configuration.PUBLICOTAURUS_BUCKET.replace(user);
     }
 
     public JsonDocument getAndLock(String userId) {
-        return Configuration.userBucket.getAndLock(USER_DOCUMENT_PREFIX + userId, 5);
+        return Configuration.PUBLICOTAURUS_BUCKET.getAndLock(USER_DOCUMENT_PREFIX + userId, 5);
     }
 
     public JsonDocument findUser(String userId) {
-        return Configuration.userBucket.get(userId);
+        counterRepository.incrementUserDocumentRetrieval();
+        return Configuration.PUBLICOTAURUS_BUCKET.get(userId);
     }
 }

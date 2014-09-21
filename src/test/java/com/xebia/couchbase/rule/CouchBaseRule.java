@@ -15,7 +15,7 @@ public class CouchBaseRule implements TestRule {
     private final BucketManager bucketManager;
 
     public CouchBaseRule(String ip) {
-        publicotaurusBucket = cluster(ip).openBucket(Configuration.PUBLICOTAURUS_BUCKET);
+        publicotaurusBucket = cluster(ip).openBucket(Configuration.PUBLICOTAURUS_BUCKET_NAME);
         bucketManager = publicotaurusBucket.bucketManager();
     }
 
