@@ -2,7 +2,7 @@ package com.xebia.couchbase.user;
 
 import com.couchbase.client.core.RequestCancelledException;
 import com.couchbase.client.java.document.JsonDocument;
-import com.couchbase.client.java.document.JsonLongDocument;
+import com.couchbase.client.java.document.StringDocument;
 import com.couchbase.client.java.error.CASMismatchException;
 import com.couchbase.client.java.error.DocumentAlreadyExistsException;
 import com.google.gson.Gson;
@@ -19,6 +19,7 @@ import static com.xebia.couchbase.Configuration.PUBLICOTAURUS_BUCKET;
 import static com.xebia.couchbase.location.AddressBuilder.anAddress;
 import static com.xebia.couchbase.user.UserBuilder.anUser;
 import static com.xebia.couchbase.user.UserProfileBuilder.anUserProfile;
+import static java.lang.Long.parseLong;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserRepositoryTest {
@@ -75,17 +76,21 @@ public class UserRepositoryTest {
     @Test
     public void should_count_number_of_document_retrieval() throws Exception {
         // Given
-        final Long userDocumentRetrievalCount = PUBLICOTAURUS_BUCKET
-                .get("user_document_retrieval_count", JsonLongDocument.class)
-                .content();
+
+        final StringDocument userDocumentRetrievalCountDocument = PUBLICOTAURUS_BUCKET
+                .get("user_document_retrieval_count", StringDocument.class);
+
+        Long userDocumentRetrievalCount = userDocumentRetrievalCountDocument != null
+                ? parseLong(userDocumentRetrievalCountDocument.content())
+                : 0L;
 
         // When
         userRepository.findUser("antoine_michaud");
 
         // Then
-        final Long eventualUserDocumentRetrievalCount = PUBLICOTAURUS_BUCKET
-                .get("user_document_retrieval_count", JsonLongDocument.class)
-                .content();
+        final Long eventualUserDocumentRetrievalCount = parseLong(PUBLICOTAURUS_BUCKET
+                .get("user_document_retrieval_count", StringDocument.class)
+                .content());
         assertThat(eventualUserDocumentRetrievalCount).isEqualTo(userDocumentRetrievalCount + 1);
     }
 
@@ -93,15 +98,6 @@ public class UserRepositoryTest {
     public void should_not_allow_read_during_edition() throws Exception {
         assertThat(userRepository.getAndLock("antoine_michaud")).isNotNull();
         assertThat(userRepository.getAndLock("antoine_michaud")).isNull();
-    }
-
-    private User findUser(String id) throws java.io.IOException {
-        return gson.getAdapter(User.class).fromJson(
-                findDocument(id).content().toString());
-    }
-
-    private JsonDocument findDocument(String id) {
-        return PUBLICOTAURUS_BUCKET.get(id);
     }
 
     @Test
@@ -115,5 +111,14 @@ public class UserRepositoryTest {
                 // Good enough if user has already been inserted
             }
         }
+    }
+
+    private User findUser(String id) throws java.io.IOException {
+        return gson.getAdapter(User.class).fromJson(
+                findDocument(id).content().toString());
+    }
+
+    private JsonDocument findDocument(String id) {
+        return PUBLICOTAURUS_BUCKET.get(id);
     }
 }
