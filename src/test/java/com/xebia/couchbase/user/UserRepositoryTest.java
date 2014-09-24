@@ -1,21 +1,17 @@
 package com.xebia.couchbase.user;
 
-import com.couchbase.client.core.RequestCancelledException;
-import com.couchbase.client.java.document.JsonDocument;
-import com.couchbase.client.java.document.StringDocument;
-import com.couchbase.client.java.error.CASMismatchException;
-import com.couchbase.client.java.error.DocumentAlreadyExistsException;
 import com.google.gson.Gson;
 import com.xebia.couchbase.batch.UserReaderFromCsv;
 import com.xebia.couchbase.location.City;
 import com.xebia.couchbase.location.Country;
+import net.spy.memcached.CASValue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Collection;
 
-import static com.xebia.couchbase.Configuration.PUBLICOTAURUS_BUCKET;
+import static com.xebia.couchbase.Configuration.COUCHBASE_CLIENT;
 import static com.xebia.couchbase.location.AddressBuilder.anAddress;
 import static com.xebia.couchbase.user.UserBuilder.anUser;
 import static com.xebia.couchbase.user.UserProfileBuilder.anUserProfile;
@@ -46,12 +42,7 @@ public class UserRepositoryTest {
                         .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
                                 .build()).build()).build();
 
-        try {
-            userRepository.insertUser(user);
-        } catch (DocumentAlreadyExistsException e) {
-            //TODO remove document at the end of the test => no more try catch
-            // If the document already exists
-        }
+        userRepository.insertUser(user);
         final User resultUser = findUser("user::v1::antoine_michaud");
         resultUser.getUserProfile().setSummary("Java Developer");
         assertThat(resultUser).isEqualTo(user);
@@ -59,43 +50,41 @@ public class UserRepositoryTest {
 
     @Test
     public void should_update_with_an_optimistic_lock() throws Exception {
-        final JsonDocument user1 = findDocument("user::v1::antoine_michaud");
-        final JsonDocument user2 = findDocument("user::v1::antoine_michaud");
-        user1.content().getObject("userProfile").put("summary", "Couchbase Developer");
-        user2.content().getObject("userProfile").put("summary", "PHP Developer");
+        final String userKey = "user::v1::antoine_michaud";
+        final UserWithCas user1 = findUserWithCas(userKey);
+        final UserWithCas user2 = findUserWithCas(userKey);
+        user1.user.getUserProfile().setSummary("Couchbase Developer");
+        user2.user.getUserProfile().setSummary("PHP Developer");
 
-        userRepository.updateUser(user1);
-        try {
-            userRepository.updateUser(user2);
-        } catch (CASMismatchException e) {
-            //CASMismatchException is actually expected here
-        }
-        assertThat(user1.content().getObject("userProfile").get("summary")).isEqualTo("Couchbase Developer");
+        userRepository.updateUser(userKey, user1.casId, user1.user);
+        userRepository.updateUser(userKey, user1.casId, user2.user);
+
+        final User resultUser = findUser(userKey);
+        assertThat(resultUser.getUserProfile().getSummary()).isEqualTo("Couchbase Developer");
     }
 
     @Test
     public void should_count_number_of_document_retrieval() throws Exception {
         // Given
+        final Object userDocumentRetrievalCountOrNull = COUCHBASE_CLIENT
+                .get("user_document_retrieval_count");
 
-        final StringDocument userDocumentRetrievalCountDocument = PUBLICOTAURUS_BUCKET
-                .get("user_document_retrieval_count", StringDocument.class);
-
-        Long userDocumentRetrievalCount = userDocumentRetrievalCountDocument != null
-                ? parseLong(userDocumentRetrievalCountDocument.content())
-                : 0L;
+        Long userDocumentRetrievalCount = userDocumentRetrievalCountOrNull != null
+                ? parseLong(userDocumentRetrievalCountOrNull.toString())
+                : -1L;
 
         // When
         userRepository.findUser("antoine_michaud");
 
         // Then
-        final Long eventualUserDocumentRetrievalCount = parseLong(PUBLICOTAURUS_BUCKET
-                .get("user_document_retrieval_count", StringDocument.class)
-                .content());
+        final Long eventualUserDocumentRetrievalCount = parseLong(COUCHBASE_CLIENT.get("user_document_retrieval_count").toString());
         assertThat(eventualUserDocumentRetrievalCount).isEqualTo(userDocumentRetrievalCount + 1);
     }
 
     @Test
     public void should_not_allow_read_during_edition() throws Exception {
+        //TODO lancer ce test en debug pour laisse le temps à couchbase de bien s'initialiser
+        //FIXME trouver une alternative pour laisser le temps à couchbase de se charger
         assertThat(userRepository.getAndLock("antoine_michaud")).isNotNull();
         assertThat(userRepository.getAndLock("antoine_michaud")).isNull();
     }
@@ -105,20 +94,38 @@ public class UserRepositoryTest {
         final Collection<User> users = UserReaderFromCsv.getUsersFrom("users.csv");
 
         for (User user : users) {
-            try {
-                userRepository.insertUser(user);
-            } catch (DocumentAlreadyExistsException | RequestCancelledException e) {
-                // Good enough if user has already been inserted
-            }
+            userRepository.insertUser(user);
         }
     }
 
     private User findUser(String id) throws java.io.IOException {
         return gson.getAdapter(User.class).fromJson(
-                findDocument(id).content().toString());
+                findDocument(id).toString());
     }
 
-    private JsonDocument findDocument(String id) {
-        return PUBLICOTAURUS_BUCKET.get(id);
+    private Object findDocument(String id) {
+        return COUCHBASE_CLIENT.get(id);
+    }
+
+    private UserWithCas findUserWithCas(String id) throws java.io.IOException {
+        final CASValue<Object> documentWithCas = findDocumentWithCas(id);
+        final User user = gson.getAdapter(User.class).fromJson(
+                documentWithCas.getValue().toString());
+
+        return new UserWithCas(user, documentWithCas.getCas());
+    }
+
+    private CASValue<Object> findDocumentWithCas(String id) {
+        return COUCHBASE_CLIENT.gets(id);
+    }
+
+    private static class UserWithCas {
+        private User user;
+        private Long casId;
+
+        private UserWithCas(User user, Long casId) {
+            this.user = user;
+            this.casId = casId;
+        }
     }
 }
