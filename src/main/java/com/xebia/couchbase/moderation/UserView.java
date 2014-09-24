@@ -1,48 +1,24 @@
 package com.xebia.couchbase.moderation;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import com.couchbase.client.protocol.views.*;
+
+import static com.xebia.couchbase.Configuration.COUCHBASE_CLIENT;
 
 public class UserView {
-    private String userId;
-    private String userName;
-    private String cityName;
-    private boolean active;
 
-    public UserView(String userId, String userName, String cityName, boolean active) {
-        this.userId = userId;
-        this.userName = userName;
-        this.cityName = cityName;
-        this.active = active;
+    private static final View inactiveUserView = COUCHBASE_CLIENT.getView("moderator", "inactive_user");
+    private static final View activeUserView = COUCHBASE_CLIENT.getView("moderator", "active_user");
+
+    public static ViewResponse getInactiveUsers() {
+        final View inactiveUserView = UserView.inactiveUserView;
+        final Query query = new Query();
+        query.setStale(Stale.UPDATE_AFTER);
+        return COUCHBASE_CLIENT.query(inactiveUserView, query);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj == this) {
-            return true;
-        }
-        if (obj.getClass() != getClass()) {
-            return false;
-        }
-        UserView rhs = (UserView) obj;
-        return new EqualsBuilder()
-                .append(this.userId, rhs.userId)
-                .append(this.userName, rhs.userName)
-                .append(this.cityName, rhs.cityName)
-                .append(this.active, rhs.active)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(userId)
-                .append(userName)
-                .append(cityName)
-                .append(active)
-                .toHashCode();
+    public static Paginator getPaginatedActiveUsers() {
+        final Query query = new Query();
+        query.setStale(Stale.UPDATE_AFTER);
+        return COUCHBASE_CLIENT.paginatedQuery(activeUserView, query, 100);
     }
 }

@@ -2,7 +2,9 @@ package com.xebia.couchbase.user;
 
 import com.google.gson.Gson;
 import com.xebia.couchbase.Configuration;
+import net.spy.memcached.CASValue;
 import net.spy.memcached.OperationTimeoutException;
+import net.spy.memcached.PersistTo;
 import net.spy.memcached.compat.log.LoggerFactory;
 
 import java.io.IOException;
@@ -19,14 +21,26 @@ public class UserRepository {
         counterRepository = new CounterRepository();
     }
 
+    public UserWithCas findUserWithCas(String id) throws IOException {
+        final CASValue<Object> documentWithCas = findDocumentWithCas(id);
+        final User user = gson.getAdapter(User.class).fromJson(
+                documentWithCas.getValue().toString());
+
+        return new UserWithCas(user, documentWithCas.getCas());
+    }
+
+    public static CASValue<Object> findDocumentWithCas(String id) {
+        return COUCHBASE_CLIENT.gets(id);
+    }
+
     public void insertUser(User user) throws Exception {
         final UserProfile userProfile = user.getUserProfile();
         final String userDocumentId = String.format("%s%s_%s", USER_DOCUMENT_PREFIX, userProfile.getFirstName().toLowerCase(), userProfile.getLastName().toLowerCase());
-        Configuration.COUCHBASE_CLIENT.set(userDocumentId, gson.toJson(user));
+        Configuration.COUCHBASE_CLIENT.set(userDocumentId, gson.toJson(user), PersistTo.MASTER);
     }
 
     public void updateUser(String key, long casId, User user) {
-        Configuration.COUCHBASE_CLIENT.cas(key, casId, gson.toJson(user));
+        Configuration.COUCHBASE_CLIENT.cas(key, casId, gson.toJson(user), PersistTo.MASTER);
     }
 
     public User findUser(String id) throws java.io.IOException {

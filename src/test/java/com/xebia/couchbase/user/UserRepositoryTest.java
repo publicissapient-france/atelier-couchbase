@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.xebia.couchbase.batch.UserReaderFromCsv;
 import com.xebia.couchbase.location.City;
 import com.xebia.couchbase.location.Country;
-import net.spy.memcached.CASValue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,17 +21,11 @@ public class UserRepositoryTest {
 
     private static UserRepository userRepository;
     private static Gson gson;
-    private CounterRepository counterRepository;
 
     @BeforeClass
     public static void staticSetUp() throws Exception {
         userRepository = new UserRepository();
         gson = new Gson();
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        counterRepository = new CounterRepository();
     }
 
     @Test
@@ -51,13 +44,13 @@ public class UserRepositoryTest {
     @Test
     public void should_update_with_an_optimistic_lock() throws Exception {
         final String userKey = "user::v1::antoine_michaud";
-        final UserWithCas user1 = findUserWithCas(userKey);
-        final UserWithCas user2 = findUserWithCas(userKey);
-        user1.user.getUserProfile().setSummary("Couchbase Developer");
-        user2.user.getUserProfile().setSummary("PHP Developer");
+        final UserWithCas user1 = userRepository.findUserWithCas(userKey);
+        final UserWithCas user2 = userRepository.findUserWithCas(userKey);
+        user1.getUser().getUserProfile().setSummary("Couchbase Developer");
+        user2.getUser().getUserProfile().setSummary("PHP Developer");
 
-        userRepository.updateUser(userKey, user1.casId, user1.user);
-        userRepository.updateUser(userKey, user1.casId, user2.user);
+        userRepository.updateUser(userKey, user1.getCasId(), user1.getUser());
+        userRepository.updateUser(userKey, user1.getCasId(), user2.getUser());
 
         final User resultUser = findUser(userKey);
         assertThat(resultUser.getUserProfile().getSummary()).isEqualTo("Couchbase Developer");
@@ -107,25 +100,4 @@ public class UserRepositoryTest {
         return COUCHBASE_CLIENT.get(id);
     }
 
-    private UserWithCas findUserWithCas(String id) throws java.io.IOException {
-        final CASValue<Object> documentWithCas = findDocumentWithCas(id);
-        final User user = gson.getAdapter(User.class).fromJson(
-                documentWithCas.getValue().toString());
-
-        return new UserWithCas(user, documentWithCas.getCas());
-    }
-
-    private CASValue<Object> findDocumentWithCas(String id) {
-        return COUCHBASE_CLIENT.gets(id);
-    }
-
-    private static class UserWithCas {
-        private User user;
-        private Long casId;
-
-        private UserWithCas(User user, Long casId) {
-            this.user = user;
-            this.casId = casId;
-        }
-    }
 }
