@@ -4,13 +4,12 @@ import com.google.gson.Gson;
 import com.xebia.couchbase.batch.UserReaderFromCsv;
 import com.xebia.couchbase.location.City;
 import com.xebia.couchbase.location.Country;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Collection;
 
-import static com.xebia.couchbase.Configuration.COUCHBASE_CLIENT;
+import static com.xebia.couchbase.Configuration.PUBLICOTAURUS_CLIENT;
 import static com.xebia.couchbase.location.AddressBuilder.anAddress;
 import static com.xebia.couchbase.user.UserBuilder.anUser;
 import static com.xebia.couchbase.user.UserProfileBuilder.anUserProfile;
@@ -59,7 +58,7 @@ public class UserRepositoryTest {
     @Test
     public void should_count_number_of_document_retrieval() throws Exception {
         // Given
-        final Object userDocumentRetrievalCountOrNull = COUCHBASE_CLIENT
+        final Object userDocumentRetrievalCountOrNull = PUBLICOTAURUS_CLIENT
                 .get("user_document_retrieval_count");
 
         Long userDocumentRetrievalCount = userDocumentRetrievalCountOrNull != null
@@ -70,7 +69,7 @@ public class UserRepositoryTest {
         userRepository.findUser("antoine_michaud");
 
         // Then
-        final Long eventualUserDocumentRetrievalCount = parseLong(COUCHBASE_CLIENT.get("user_document_retrieval_count").toString());
+        final Long eventualUserDocumentRetrievalCount = parseLong(PUBLICOTAURUS_CLIENT.get("user_document_retrieval_count").toString());
         assertThat(eventualUserDocumentRetrievalCount).isEqualTo(userDocumentRetrievalCount + 1);
     }
 
@@ -97,7 +96,7 @@ public class UserRepositoryTest {
     }
 
     private Object findDocument(String id) {
-        return COUCHBASE_CLIENT.get(id);
+        return PUBLICOTAURUS_CLIENT.get(id);
     }
 
 }
