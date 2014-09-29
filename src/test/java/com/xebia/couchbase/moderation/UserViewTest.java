@@ -2,7 +2,6 @@ package com.xebia.couchbase.moderation;
 
 import com.couchbase.client.protocol.views.ViewResponse;
 import com.couchbase.client.protocol.views.ViewRow;
-import com.google.gson.Gson;
 import com.xebia.couchbase.user.UserRepository;
 import com.xebia.couchbase.user.UserWithCas;
 import org.junit.Before;
@@ -25,7 +24,7 @@ public class UserViewTest {
     //Exercice 9
     public void should_retrieve_user_from_moderator_point_of_view() throws Exception {
         // Given
-        disableAnUser();
+        disableAnUser("user::v1::adrian_vincent");
 
         // When
         final ViewResponse inactiveUserResponse = UserView.getInactiveUsers();
@@ -33,7 +32,9 @@ public class UserViewTest {
         // Then
         final ViewRow userViewRow = inactiveUserResponse.iterator().next();
         assertThat(userViewRow).isNotNull();
-        assertThat(userViewRow.getKey()).isEqualTo("user::v1::adrian_vincent");
+        assertThat(userViewRow.getKey()).isEqualTo("VINCENT");
+        assertThat(userViewRow.getValue()).isEqualTo("{\"userId\":\"user::v1::adrian_vincent\"," +
+                "\"userName\":\"ADRIAN VINCENT\",\"cityName\":\"San Diego\",\"active\":false}");
     }
 
     @Test
@@ -48,12 +49,12 @@ public class UserViewTest {
 
         userViewRow = activeUserView.nextPage().iterator().next();
         assertThat(userViewRow).isNotNull();
-        assertThat(userViewRow.getKey()).isEqualTo("user::v1::arjan_levine");
+        assertThat(userViewRow.getKey()).isEqualTo("user::v1::arielle_le");
     }
 
-    public void disableAnUser() throws IOException {
-        final UserWithCas userWithCas = userRepository.findUserWithCas("user::v1::adrian_vincent");
+    public void disableAnUser(String userId) throws IOException {
+        final UserWithCas userWithCas = userRepository.findUserWithCas(userId);
         userWithCas.getUser().setActive(false);
-        userRepository.updateUser("user::v1::adrian_vincent", userWithCas.getCasId(), userWithCas.getUser());
+        userRepository.updateUser(userId, userWithCas.getCasId(), userWithCas.getUser());
     }
 }
