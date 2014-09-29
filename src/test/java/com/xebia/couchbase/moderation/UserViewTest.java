@@ -1,6 +1,5 @@
 package com.xebia.couchbase.moderation;
 
-import com.couchbase.client.protocol.views.Paginator;
 import com.couchbase.client.protocol.views.ViewResponse;
 import com.couchbase.client.protocol.views.ViewRow;
 import com.google.gson.Gson;
@@ -15,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserViewTest {
 
-    private static final Gson gson = new Gson();
     private UserRepository userRepository;
 
     @Before
@@ -24,6 +22,7 @@ public class UserViewTest {
     }
 
     @Test
+    //Exercice 9
     public void should_retrieve_user_from_moderator_point_of_view() throws Exception {
         // Given
         disableAnUser();
@@ -38,17 +37,16 @@ public class UserViewTest {
     }
 
     @Test
+    //Exercice 10
     public void should_paginate() throws Exception {
-        final Paginator activeUserResponsePaginator = UserView.getPaginatedActiveUsers();
+        final UserView activeUserView = UserView.getPaginatedActiveUsers();
 
         // Then
-        activeUserResponsePaginator.hasNext();
-        ViewRow userViewRow = activeUserResponsePaginator.next().iterator().next();
+        ViewRow userViewRow = activeUserView.nextPage().iterator().next();
         assertThat(userViewRow).isNotNull();
         assertThat(userViewRow.getKey()).isEqualTo("user::v1::aaliyah_scott");
 
-        activeUserResponsePaginator.hasNext();
-        userViewRow = activeUserResponsePaginator.next().iterator().next();
+        userViewRow = activeUserView.nextPage().iterator().next();
         assertThat(userViewRow).isNotNull();
         assertThat(userViewRow.getKey()).isEqualTo("user::v1::arjan_levine");
     }

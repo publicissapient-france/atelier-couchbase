@@ -28,7 +28,8 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void should_insert_user_in_database() throws Exception {
+    //Exercice 3
+    public void should_insert_and_retrieve_an_user_in_database() throws Exception {
         final User user = anUser().withUserProfile(
                 anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
                         .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
@@ -41,6 +42,7 @@ public class UserRepositoryTest {
     }
 
     @Test
+    //Exercice 4
     public void should_update_with_an_optimistic_lock() throws Exception {
         final String userKey = "user::v1::antoine_michaud";
         final UserWithCas user1 = userRepository.findUserWithCas(userKey);
@@ -56,6 +58,7 @@ public class UserRepositoryTest {
     }
 
     @Test
+    //Exercice 5
     public void should_count_number_of_document_retrieval() throws Exception {
         // Given
         final Object userDocumentRetrievalCountOrNull = PUBLICOTAURUS_CLIENT
@@ -71,14 +74,6 @@ public class UserRepositoryTest {
         // Then
         final Long eventualUserDocumentRetrievalCount = parseLong(PUBLICOTAURUS_CLIENT.get("user_document_retrieval_count").toString());
         assertThat(eventualUserDocumentRetrievalCount).isEqualTo(userDocumentRetrievalCount + 1);
-    }
-
-    @Test
-    public void should_not_allow_read_during_edition() throws Exception {
-        //TODO lancer ce test en debug pour laisse le temps à couchbase de bien s'initialiser
-        //FIXME trouver une alternative pour laisser le temps à couchbase de se charger
-        assertThat(userRepository.getAndLock("antoine_michaud")).isNotNull();
-        assertThat(userRepository.getAndLock("antoine_michaud")).isNull();
     }
 
     @Test
