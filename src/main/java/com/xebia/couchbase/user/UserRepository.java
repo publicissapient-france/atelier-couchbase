@@ -3,7 +3,6 @@ package com.xebia.couchbase.user;
 import com.google.gson.Gson;
 import com.xebia.couchbase.Configuration;
 import net.spy.memcached.CASValue;
-import net.spy.memcached.PersistTo;
 import net.spy.memcached.internal.OperationFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +51,7 @@ public class UserRepository {
 
     //TODO Exercice 5
     public void updateUser(String key, long casId, User user) {
-        Configuration.PUBLICOTAURUS_CLIENT.cas(key, casId, gson.toJson(user), PersistTo.MASTER);
+        Configuration.PUBLICOTAURUS_CLIENT.cas(key, casId, gson.toJson(user));
     }
 
     //TODO Exercice 6
