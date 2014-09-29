@@ -40,11 +40,11 @@
                 Vous êtes chargé de mettre en place un POC démontrant l'efficacité de Couchbase. Robert  a mis à votre disposition <a href="https://github.com/xebia-france/atelier-couchbase">la beta de l'application</a> que vous vous empressez de récupérer sur votre poste, dans le workspace de votre choix. Puis vous buildez l'application avec maven, comme à votre habitude. Cela vous permet aussi de télécharger toutes les dépendances car comme vous le savez, la connexion wifi de votre entreprise n'est pas glorieuse...
                 </p> 
 
-                {% highlight bash %}
-    $ git clone https://github.com/xebia-france/atelier-couchbase.git
-    $ cd atelier-couchbase
-    $ mvn clean compile
-                {% endhighlight %}
+{% highlight bash %}
+$ git clone https://github.com/xebia-france/atelier-couchbase.git
+$ cd atelier-couchbase
+$ mvn clean compile
+{% endhighlight %}
 
                 <p>
                 Vous pouvez passer au paragraphe suivant pendant le téléchargement des dépendances.
@@ -60,10 +60,10 @@
                 Pour recevoir la clé privée pour vous y connecter, envoyez un mail à l'adresse fournie pendant le workshop. 
                 </p>
 
-                {% highlight bash %}
-    $ wget http://packages.couchbase.com/releases/3.0.0-beta2/couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
-    $ rpm -i couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
-                {% endhighlight %}
+{% highlight bash %}
+$ wget http://packages.couchbase.com/releases/3.0.0-beta2/couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
+$ rpm -i couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
+{% endhighlight %}
 
                 <h2>Démarrage et configuration</h2>
                 <p>Vous pouvez maintenant démarrer couchbase-server et vous connecter à la console web depuis votre machine de développement (<a href="http://{{page.group}}-couchbase-workshop.aws.xebiatechevent.info:8091">http://{{page.group}}-couchbase-workshop.aws.xebiatechevent.info:8091</a>). Vous configurez votre serveur de la manière suivante :</p>
@@ -101,9 +101,9 @@
                 <p>
                 Si le test passe au vert, c'est tout bon, vous pouvez maintenant vous placer sur la branche user-profile.
                 </p>
-                {% highlight bash %}
-    $ git checkout user-profile
-                {% endhighlight %}
+{% highlight bash %}
+$ git checkout user-profile
+{% endhighlight %}
                 <h2>Exercice 2 : Création d'un bucket pour l'application</h2>
                 <p>Pour l'instant, l'application ne possède pas de bucket dédié. Vous créez maintenant le bucket "publicotaurus" modifiant les configurations suivantes :</p>
                 <ul>
@@ -132,7 +132,8 @@
                     <li>les prénoms/noms de l'utilisateur (dans userName);</li>
                     <li>la ville (cityName);</li> 
                     <li>si ce dernier est actif ou non (active);</li>
-                    Vous devrez tout d'abord créer une vue en mode développement afin de tester votre vue.
+                </ul>
+                Vous devrez tout d'abord créer une vue en mode développement afin de tester votre vue.
                 </p>
                 <p>Pour décrire une vue, on utilise le paradigme de map/reduce. Map est la fonction telle que select en sql. Reduce est une fonction d'aggrégation, comme un count. Ces deux fonctions s'écrivent en javascript.</p>
                 <p>Pour tester votre vue, vous pouvez sauvegarder votre fonction de map, puis cliquer sur "show results".</p>
@@ -156,9 +157,9 @@
                 <h2>XDCR</h2>
                 <p>Faites nous signe quand vous êtes arrivé ici :-)</p>
                 <h3>
-                    <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+                    <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Auteurs et contributeurs</h3>
 
-                <p>Jean-Eudes Couignoux (<a href="https://github.com/jean-eudes" class="user-mention">@Jeaneudes</a>), et Antoine Michaud (<a href="https://github.com/antoinemichaud" class="user-mention">@AMichaud34</a>).</p>
+                <p>Antoine Michaud (<a href="https://github.com/antoinemichaud" class="user-mention">@AMichaud34</a>) et Jean-Eudes Couignoux (<a href="https://github.com/jean-eudes" class="user-mention">@Jeaneudes</a>)</p>
             </section>
         </div>
     </body>
