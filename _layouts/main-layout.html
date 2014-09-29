@@ -126,18 +126,24 @@
                 <h2>Exercice 7 : Créez vos premières vue</h2>
                 <p>Les profils utilisateurs doivent pouvoir être administrés facilement par les modérateurs. Mais il est inutile de faire remonter les profils entiers pour cela...</p>
                 <p>
-                Rendez vous dans la console web Couchbase et créez une vue permettant de déterminer l'id de l'utilisateur (userId) les prénoms/noms de l'utilisateur (dans userName), la ville (cityName) et si ce dernier est actif ou non (active). Vous devrez tout d'abord créer une vue en mode développement afin de tester votre vue.
+                Rendez vous dans la console web Couchbase et créez une vue permettant de déterminer :
+                <ul> 
+                    <li>l'id de l'utilisateur (userId);</li>
+                    <li>les prénoms/noms de l'utilisateur (dans userName);</li>
+                    <li>la ville (cityName);</li> 
+                    <li>si ce dernier est actif ou non (active);</li>
+                    Vous devrez tout d'abord créer une vue en mode développement afin de tester votre vue.
                 </p>
                 <p>Pour décrire une vue, on utilise le paradigme de map/reduce. Map est la fonction telle que select en sql. Reduce est une fonction d'aggrégation, comme un count. Ces deux fonctions s'écrivent en javascript.</p>
-                <p>Pour tester votre vue, vous pouvez sauvegarder votre fonction de , puis cliquer sur "show results".</p>
-                <p>Maintenant que votre vue vous paraît satisfaisante, nous allons maintenant créer deux autres vues dans le même design document (un design document et un regroupement de vues, promues en mode "production" au même moment).</p>
+                <p>Pour tester votre vue, vous pouvez sauvegarder votre fonction de map, puis cliquer sur "show results".</p>
+                <p>Maintenant que votre vue vous paraît satisfaisante, nous allons créer deux autres vues dans le même design document (un design document et un regroupement de vues, promues en mode "production" au même moment).</p>
                 <p>Nos deux autres vues seront active_user et inactive_user et auront pour rôles de faire ce que leurs noms indiquent.</p>
                 <p>Une fois l'édition de vos vues terminées et testées, vous pouvez "publier" votre vue.</p>
                 <h2>Exercice 8 : Modifiez un design document</h2>
                 <p>Vous souhaitez maintenant ajouter une vue pour compter le nombre d'utilisateurs inactifs. Pour cela, vous devez copier le design document en mode développement.</p>
 
                 <h2>Exercice 9 : Les vues dans l'application</h2>
-                <p>Récupérez ces vues depuis l'application. Les modérateurs doivent également pouvoir désactiver tous les vilains utilisateurs ! Robert compte sur vous.</p>
+                <p>Récupérez ces vues depuis l'application.
                 <h2>Exercice 10 : Pagination</h2>
                 <p>Nos chers modérateurs souhaitent n'avoir que 100 résultats par page.</p>
                 <h2>Clustering</h2>
@@ -149,14 +155,10 @@
                 </p>
                 <h2>XDCR</h2>
                 <p>Faites nous signe quand vous êtes arrivé ici :-)</p>
-
-
                 <h3>
                     <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
-                <p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-
+                <p>Jean-Eudes Couignoux (<a href="https://github.com/jean-eudes" class="user-mention">@Jeaneudes</a>), et Antoine Michaud (<a href="https://github.com/antoinemichaud" class="user-mention">@AMichaud34</a>).</p>
             </section>
         </div>
     </body>
