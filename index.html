@@ -1,146 +1,45 @@
 <!DOCTYPE html> 
 <html>
-<head>
-<meta charset='utf-8'>
-<meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
-<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-<link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-<link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+        <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
 
-<title>Atelier Couchbase by Xebia France</title>
-</head>
+        <title>Atelier Couchbase by Xebia France</title>
+    </head>
 
-<body>
+    <body>
 
-<header>
-    <div class="container">
-        <h1>Atelier Couchbase</h1>
-    </div>
-</header>
+        <header>
+            <div class="container">
+                <h1>Atelier Couchbase</h1>
+            </div>
+        </header>
 
-<div class="container">
-    <section id="main_content">
-        <h2>Welcome</h2>
-        <p>
-        Bienvenue dans cet atelier et voici votre mission si vous l'acceptez.
-        </p>
+        <h2>
+            <a name="les-groupes-" class="anchor" href="#les-groupes-"><span
+                                                  class="octicon octicon-link"></span></a>Les groupes</h2>
+        <h3>Choisissez votre groupe :</h3>
+        <p><a href="./groups/adrastea.html">Groupe Adrastea<a></p>
+        <p><a href="./groups/amalthea.html">Groupe Amalthea<a></p>
+        <p><a href="./groups/autonoe.html">Groupe Autonoe<a></p>
+        <p><a href="./groups/callirrhoe.html">Groupe Callirrhoe<a></p>
+        <p><a href="./groups/callisto.html">Groupe Callisto<a></p>
+        <p><a href="./groups/carme.html">Groupe Carme<a></p>
+        <p><a href="./groups/chaldene.html">Groupe Chaldene<a></p>
+        <p><a href="./groups/erinome.html">Groupe Erinome<a></p>
+        <p><a href="./groups/ganymede.html">Groupe Ganymede<a></p>
+        <p><a href="./groups/harpalyke.html">Groupe Harpalyke<a></p>
+        <p><a href="./groups/hermippe.html">Groupe Hermippe<a></p>
+        <p><a href="./groups/himalia.html">Groupe Himalia<a></p>
+        <p><a href="./groups/iocaste.html">Groupe Iocaste<a></p>
+        <p><a href="./groups/isonoe.html">Groupe Isonoe<a></p>
+        <p><a href="./groups/kalyke.html">Groupe Kalyke<a></p>
+        <p><a href="./groups/io.html">Groupe Io<a></p>
 
-        <p>
-        Vous êtes développeur pour Publicotaurus, une entreprise de publicité qui grossit et qui a plutôt la cote.
-        </p>
-
-        <p>
-        Robert, votre chef vient de vous parler de ce nouveau projet. Une idée très porteuse ! Une application dont le développement avance bien, par ailleurs. Mais pas évident d'être au point niveau perf'. Pas évident de respecter les attentes avec ce bon vieil Oracle. Sans parler de l'administration... C'est pourquoi Robert est venu vous voir. 
-        </p>
-
-        <h2>L'application</h2>
-        <p>
-        Vous êtes chargé de mettre en place un POC démontrant l'efficacité de Couchbase. Robert  a mis à votre disposition <a href="https://github.com/xebia-france/atelier-couchbase">la beta de l'application</a> que vous vous empressez de récupérer sur votre poste, dans le workspace de votre choix. Puis vous buildez l'application avec maven, comme à votre habitude. Cela vous permet aussi de télécharger toutes les dépendances car comme vous le savez, la connexion wifi de votre entreprise n'est pas glorieuse...
-        </p> 
-
-        <pre><code>
-    $ git clone https://github.com/xebia-france/atelier-couchbase.git
-    $ cd atelier-couchbase
-    $ mvn clean compile
-        </code></pre>
-
-        <p>
-        Vous pouvez passer au paragraphe suivant pendant le téléchargement des dépendances.
-        </p>
-
-        <h2>Installation de Couchbase</h2>
-        <p>
-        Robert a mis à votre disposition deux instances Amazon EC2 medium (TODO, détailler la config) tournant sous Redhat. Vous vous connectez à la première instance, téléchargez la version <a href="http://packages.couchbase.com/releases/3.0.0-beta2/couchbase-server_3.0.0-beta2_x86_64_centos6.rpm">3.0.0-beta2 de couchbase</a>, puis l'installez : 
-        </p>
-        TODO, préciser le nom de l'instance + instructions connexion ssh.
-        <pre><code>
-    $ wget http://packages.couchbase.com/releases/3.0.0-beta2/couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
-    $ rpm -i couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
-        </code></pre>
-
-        <h2>Démarrage et configuration</h2>
-        <p>Vous pouvez maintenant démarrer couchbase-server et vous connecter à la console web depuis votre machine de développement. Vous créez le bucket default avec les contraintes suivantes : </p>
-
-        <ul>
-            <li>128MO de mémoire allouée par noeud</li>
-            <li>Disable replicas</li>
-        </ul>
-
-        <p>Inutile de créer les buckets sample proposés</p>
-
-        <p>Vous créez le bucket "publicotaurus" respectant les contraintes suivantes :</p>
-        TODO, configuration du swapiness ?
-        <p></p>
-        <ul>
-            <li>Bucket de type couchbase (sinon, pas de persistance !)</li>
-            <li>256MO de mémoire allouée par noeud</li>
-            <li>Enable flush</li>
-            <li>1 replica</li>
-            <li>Indices in memory</li>
-        </ul>
-
-        <h2>Votre premier document</h2>
-        <p>
-        Ajoutez votre premier document depuis la console web. Un document ayant pour id "hello_couchbase" et pour contenu "hello":"world".
-        </p>
-        <p>
-        Vous vous placez maintenant dans votre IDE préféré et implémentez votre premier client qui vous permettra d'accéder au document que vous venez de créer depuis l'interface.
-        </p>
-
-        <p>
-        Si le test passe au vert, c'est tout bon, vous pouvez maintenant vous placer sur la branche user-profile.
-        </p>
-       <h2>Création d'un bucket pour l'application</h2>
-        <p>Pour l'instant, l'application ne possède pas de bucket dédié. Vous créez un bucket Publicotaurus avec la configuration suivante :
-        <p>TODO</p>
-        <h2>Insertion du profil utilisateur</h2>
-        <p>L'application que vous récupérez dispose de profils utilisateur. Le test suivant définit un utilisateur que vous devrez insérer en base grâce à l'API couchbase.
-        </p>
-        <h2>Modifications concurrentes</h2>
-        <p>Différentes solutions vous sont offertes pour modifier vos données de manières concurrentes. Le verrou optimiste, et le verrou pessimiste. Vous trouverez un test ayant pour but de faire fonctionner chacune des solutions.</p>
-
-        <h2>Modification du modèle</h2>
-        <h2>Apprendre à compter</h2>
-        <h2></h2>
-
-        <h2>Insertion massive</h2>
-        Maintenant que votre application roxx, vous souhaitez ajouter les 1 000 clients privilégiés qui utiliseront l'application les premiers.
-        <p>TODO</p>
-
-
-
-        <h2>Créez votre première vue</h2>
-        <p>Les profils utilisateurs doivent pouvoir être administrés facilement par les modérateurs. Mais il est inutile de faire remonter les profils entiers pour cela...</p>
-        <p>
-        Rendez vous dans la console web Couchbase et créez une vue permettant de déterminer le nom d'utilisateur, l'adresse e-mail, la ville et si ce dernier est actif ou non. Vous devrez tout d'abord créer une vue en mode développement afin de tester votre vue. C'est seulement une fois que cette vue vous paraîtra satisfaisante que vous pourrez la promouvoir en mode "production"
-        </p>
-        <h2>Les vues dans l'application</h2>
-        <p>Récupérez ces vues depuis l'application. Les modérateurs doivent également pouvoir désactiver tous les vilains utilisateurs ! Robert compte sur vous.</p>
-        <h2>Pagination</h2>
-        <p>Nos chers modérateurs souhaitent n'avoir que 100 résultats par page.</p>
-        <h2>N1QL</h2>
-        <p>C'est maintenant l'équipe de Business Intelligence qui s'en prend à vous. Monde cruel... Ils souhaitent pouvoir observer régulièrement les villes desquelles viennent les utilisateurs.</p>
-        <h2>Clustering</h2>
-        <p>
-        Ca y est, vous avez commencé à énerver les gens et tout le monde pense que vous bluffez. C'est trop beau pour être vrai. Et d'abord, ça ne peut pas être aussi facile de créer un cluster et de gérer sa réplication !
-        </p>
-        <p>
-        Vous installez donc couchbase-server sur la deuxième machine mise à votre disposition. Affichez la console d'administration de votre nouveau serveur et joignez le à l'ancien. Lancez un rebalancing et observez l'activité de vos noeuds à travers vos graphes.
-        </p>
-        <h2>XDCR</h2>
-        <p>Faites nous signe quand vous êtes arrivé ici :-)</p>
-
-
-        <h3>
-            <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-        <p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-
-    </section>
-</div>
-
-
-</body>
+    </body>
 </html>
+        

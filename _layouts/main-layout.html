@@ -1,0 +1,163 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+        <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../stylesheets/print.css" media="print">
+
+        <title>Atelier Couchbase by Xebia France</title>
+    </head>
+
+    <body>
+
+        <header>
+            <div class="container">
+                <h1>Atelier Couchbase</h1>
+            </div>
+        </header>
+
+
+        <div class="container">
+            <section id="main_content">
+                <h2>Welcome</h2>
+                <p>
+                Bienvenue dans cet atelier et voici votre mission si vous l'acceptez.
+                </p>
+
+                <p>
+                Vous êtes développeur pour Publicotaurus, une entreprise de publicité qui grossit et qui a plutôt la cote.
+                </p>
+
+                <p>
+                Robert, votre chef vient de vous parler de ce nouveau projet. Une idée très porteuse ! Une application dont le développement avance bien, par ailleurs. Mais pas évident d'être au point niveau perf'. Pas évident de respecter les attentes avec ce bon vieil Oracle. Sans parler de l'administration... C'est pourquoi Robert est venu vous voir. 
+                </p>
+
+                <h2>L'application</h2>
+                <p>
+                Vous êtes chargé de mettre en place un POC démontrant l'efficacité de Couchbase. Robert  a mis à votre disposition <a href="https://github.com/xebia-france/atelier-couchbase">la beta de l'application</a> que vous vous empressez de récupérer sur votre poste, dans le workspace de votre choix. Puis vous buildez l'application avec maven, comme à votre habitude. Cela vous permet aussi de télécharger toutes les dépendances car comme vous le savez, la connexion wifi de votre entreprise n'est pas glorieuse...
+                </p> 
+
+                {% highlight bash %}
+    $ git clone https://github.com/xebia-france/atelier-couchbase.git
+    $ cd atelier-couchbase
+    $ mvn clean compile
+                {% endhighlight %}
+
+                <p>
+                Vous pouvez passer au paragraphe suivant pendant le téléchargement des dépendances.
+                </p>
+
+                <h2>Installation de Couchbase</h2>
+                <p>
+                Robert a mis à votre disposition une instance Amazon EC2 medium (1 CPU Xeon E5-2670, 3.75GO RAM, Disque dur SSD 4GO) tournant sous Redhat Enterprise Linux 6.5. Vous vous connectez à la première instance, téléchargez la version <a href="http://packages.couchbase.com/releases/3.0.0-beta2/couchbase-server_3.0.0-beta2_x86_64_centos6.rpm">3.0.0-beta2 de couchbase</a>, puis l'installez : 
+                </p>
+                <p>
+                Votre instance est disponible à l'adresse suivante : {{page.group}}-couchbase-workshop.aws.xebiatechevent.info.<br/>
+
+                Pour recevoir la clé privée pour vous y connecter, envoyez un mail à l'adresse fournie pendant le workshop. 
+                </p>
+
+                {% highlight bash %}
+    $ wget http://packages.couchbase.com/releases/3.0.0-beta2/couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
+    $ rpm -i couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
+                {% endhighlight %}
+
+                <h2>Démarrage et configuration</h2>
+                <p>Vous pouvez maintenant démarrer couchbase-server et vous connecter à la console web depuis votre machine de développement (<a href="http://{{page.group}}-couchbase-workshop.aws.xebiatechevent.info:8091">http://{{page.group}}-couchbase-workshop.aws.xebiatechevent.info:8091</a>). Vous configurez votre serveur de la manière suivante :</p>
+                <ul>
+                    <li>Hotname: http://{{page.group}}-couchbase-workshop.aws.xebiatechevent.info</li>
+                    <li>Per Server RAM Quota: 2000</li>
+                </ul>
+                <p>Inutile de créer les jeux de données présentés, vous avez les vôtres (même si vous ne le savez pas encore)
+
+                <p>Vous créez le bucket default en changeant la configuration suivante : </p>
+
+                <ul>
+                    <li>100MO de mémoire allouée par noeud (minimum)</li>
+                    <li>Disable replicas</li>
+                </ul>
+                <p>Dans la page de notifications, la seule étape nécessaire est d'accepter les termes et conditions. Vous pouvez donc aussi décocher la case au début de la page.</p>
+
+                <p>Pour la page suivante :</p>
+                <ul>
+                    <li>Administrator</li>
+                    <li>couchbase</li>
+                </ul>
+
+                <p>Votre cluster démarre !</p>
+
+
+                <h2>Exercice 1 : Votre premier document</h2>
+                <p>
+                Ajoutez votre premier document depuis la console web. Un document ayant pour id "hello_couchbase" et pour contenu "hello":"world".
+                </p>
+                <p>
+                Vous vous placez maintenant dans votre IDE préféré, à la racine du projet que vous venez de télécharger, et implémentez votre premier client qui vous permettra d'accéder au document que vous venez de créer depuis l'interface. Pour vous aider dans votre tâche, vous trouverez des commentaires de la forme de "//TODO Exercice n".
+                </p>
+
+                <p>
+                Si le test passe au vert, c'est tout bon, vous pouvez maintenant vous placer sur la branche user-profile.
+                </p>
+                {% highlight bash %}
+    $ git checkout user-profile
+                {% endhighlight %}
+                <h2>Exercice 2 : Création d'un bucket pour l'application</h2>
+                <p>Pour l'instant, l'application ne possède pas de bucket dédié. Vous créez maintenant le bucket "publicotaurus" modifiant les configurations suivantes :</p>
+                <ul>
+                    <li>1500MO de mémoire allouée par noeud</li>
+                    <li>disable replicas</li>
+                    <li>Enable flush (pour permettre de vider le bucket au besoin)</li>
+                </ul>
+                <h2>Exercice 3 : Insertion du profil utilisateur</h2>
+                <p>L'application que vous récupérez dispose de profils utilisateur. Le test suivant définit un utilisateur que vous devrez insérer en base grâce à l'API couchbase.
+                </p>
+                <h2>Exercice 4 : Modifications concurrentes</h2>
+                <p>Différentes solutions vous sont offertes pour modifier vos données en évitant un conflit. Vous utiliserez ici la méthode appelée "check and set", n'étant ni plus ni moins qu'un verrou optimiste.
+                <h2>Exercice 5 : Apprendre à compter</h2>
+                <p>Vous souhaitez compter le nombre de fois qu'une utilisateur requête son profil. Mais cette fois, c'est une donnée qui va souvent évoluer et le verrou n'est pas la solution satisfaisante.</p>
+                <p>A travers la console web Couchbase, créez le document "user_document_retrieval_count" contenant la valeur 0.</p>
+
+                <h2>Exercice 6 : Insertion massive</h2>
+                <p>Maintenant que votre application roxx, vous souhaitez ajouter les 1 000 clients privilégiés qui utiliseront l'application les premiers.</p>
+
+                <h2>Exercice 7 : Créez vos premières vue</h2>
+                <p>Les profils utilisateurs doivent pouvoir être administrés facilement par les modérateurs. Mais il est inutile de faire remonter les profils entiers pour cela...</p>
+                <p>
+                Rendez vous dans la console web Couchbase et créez une vue permettant de déterminer l'id de l'utilisateur (userId) les prénoms/noms de l'utilisateur (dans userName), la ville (cityName) et si ce dernier est actif ou non (active). Vous devrez tout d'abord créer une vue en mode développement afin de tester votre vue.
+                </p>
+                <p>Pour décrire une vue, on utilise le paradigme de map/reduce. Map est la fonction telle que select en sql. Reduce est une fonction d'aggrégation, comme un count. Ces deux fonctions s'écrivent en javascript.</p>
+                <p>Pour tester votre vue, vous pouvez sauvegarder votre fonction de , puis cliquer sur "show results".</p>
+                <p>Maintenant que votre vue vous paraît satisfaisante, nous allons maintenant créer deux autres vues dans le même design document (un design document et un regroupement de vues, promues en mode "production" au même moment).</p>
+                <p>Nos deux autres vues seront active_user et inactive_user et auront pour rôles de faire ce que leurs noms indiquent.</p>
+                <p>Une fois l'édition de vos vues terminées et testées, vous pouvez "publier" votre vue.</p>
+                <h2>Exercice 8 : Modifiez un design document</h2>
+                <p>Vous souhaitez maintenant ajouter une vue pour compter le nombre d'utilisateurs inactifs. Pour cela, vous devez copier le design document en mode développement.</p>
+
+                <h2>Exercice 9 : Les vues dans l'application</h2>
+                <p>Récupérez ces vues depuis l'application. Les modérateurs doivent également pouvoir désactiver tous les vilains utilisateurs ! Robert compte sur vous.</p>
+                <h2>Exercice 10 : Pagination</h2>
+                <p>Nos chers modérateurs souhaitent n'avoir que 100 résultats par page.</p>
+                <h2>Clustering</h2>
+                <p>
+                Ca y est, vous avez commencé à énerver les gens et tout le monde pense que vous bluffez. C'est trop beau pour être vrai. Et d'abord, ça ne peut pas être aussi facile de créer un cluster et de gérer sa réplication !
+                </p>
+                <p>
+                Vous installez donc couchbase-server sur la deuxième machine mise à votre disposition. Affichez la console d'administration de votre nouveau serveur et joignez le à l'ancien. Lancez un rebalancing et observez l'activité de vos noeuds à travers vos graphes.
+                </p>
+                <h2>XDCR</h2>
+                <p>Faites nous signe quand vous êtes arrivé ici :-)</p>
+
+
+                <h3>
+                    <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+                <p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+
+
+            </section>
+        </div>
+    </body>
+</html>
