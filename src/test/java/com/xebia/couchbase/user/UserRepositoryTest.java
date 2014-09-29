@@ -77,12 +77,15 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void should_insert_a_bulk_of_users() throws Exception {
+    //Exercice 6
+    public void should_insert_and_compare_bulk_of_users() throws Exception {
         final Collection<User> users = UserReaderFromCsv.getUsersFrom("users.csv");
 
         for (User user : users) {
             userRepository.insertUser(user);
         }
+
+        assertThat(userRepository.findAll(UserReaderFromCsv.getKeysFrom("users.csv"))).hasSameSizeAs(users).containsAll(users);
     }
 
     private User findUser(String id) throws java.io.IOException {

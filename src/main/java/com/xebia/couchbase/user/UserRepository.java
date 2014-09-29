@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static com.xebia.couchbase.Configuration.PUBLICOTAURUS_CLIENT;
 
@@ -50,6 +53,17 @@ public class UserRepository {
     //TODO Exercice 5
     public void updateUser(String key, long casId, User user) {
         Configuration.PUBLICOTAURUS_CLIENT.cas(key, casId, gson.toJson(user), PersistTo.MASTER);
+    }
+
+    //TODO Exercice 6
+    public Collection<User> findAll(Collection<String> userKeys) {
+        List<User> result = new ArrayList<>();
+
+        for (Object userObject : Configuration.PUBLICOTAURUS_CLIENT.getBulk(userKeys).values()) {
+            result.add(gson.fromJson(userObject.toString(), User.class));
+        }
+
+        return result;
     }
 
     private User documentToJson(Object document) throws java.io.IOException {
