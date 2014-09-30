@@ -52,7 +52,7 @@ $ mvn clean compile
 
                 <h2>Installation de Couchbase</h2>
                 <p>
-                Robert a mis à votre disposition une instance Amazon EC2 medium (1 CPU Xeon E5-2670, 3.75GO RAM, Disque dur SSD 4GO) tournant sous Redhat Enterprise Linux 6.5. Vous vous connectez à la première instance, téléchargez la version <a href="http://packages.couchbase.com/releases/3.0.0-beta2/couchbase-server_3.0.0-beta2_x86_64_centos6.rpm">3.0.0-beta2 de couchbase</a>, puis l'installez : 
+                Robert a mis à votre disposition une instance Amazon EC2 medium (1 CPU Xeon E5-2670, 3.75GO RAM, Disque dur SSD 4GO) tournant sous Redhat Enterprise Linux 6.5. Vous vous connectez à la première instance, téléchargez la version <a href="http://packages.couchbase.com/releases/2.5.1/couchbase-server-enterprise_2.5.1_x86_64.rpm">2.5.1 de couchbase</a>, puis l'installez : 
                 </p>
                 <p>
                 Votre instance est disponible à l'adresse suivante : {{page.group}}-couchbase-workshop.aws.xebiatechevent.info.<br/>
@@ -61,8 +61,8 @@ $ mvn clean compile
                 </p>
 
 {% highlight bash %}
-$ wget http://packages.couchbase.com/releases/3.0.0-beta2/couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
-$ rpm -i couchbase-server_3.0.0-beta2_x86_64_centos6.rpm
+$ wget http://packages.couchbase.com/releases/2.5.1/couchbase-server-enterprise_2.5.1_x86_64.rpm
+$ rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
 {% endhighlight %}
 
                 <h2>Démarrage et configuration</h2>
