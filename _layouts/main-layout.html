@@ -105,6 +105,7 @@ $ rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                 <p>
                 Si le test passe au vert, continuer à l'étape 2.
                 </p>
+                
                 <p class="solution">
                     Aide : <a href="http://www.couchbase.com/autodocs/couchbase-java-client-1.4.4/com/couchbase/client/CouchbaseClient.html">API du client couchbase</a>
                 </p>
@@ -115,19 +116,27 @@ $ rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                     <li>1500MO de mémoire allouée par noeud</li>
                     <li>Enable flush (pour permettre de vider le bucket au besoin)</li>
                 </ul>
+                
                 <h2>Exercice 3 : Insertion du profil utilisateur</h2>
                 <p>L'application que vous récupérez dispose de profils utilisateur. Le test suivant définit un utilisateur que vous devrez insérer en base grâce à l'API couchbase (UserRepositoryTest). Pour rappel, couchbase stocke
                 les objets au format JSON. vous pouvez utiliser l'api Gson (ou autre) pour le sérialiser.
                 </p>
+                
                 <h2>Exercice 4 : Modifications concurrentes</h2>
                 <p>Lorsque deux utilisateurs modifient le même document en même temps, c'est en général celui qui le "commit" le dernier qui voir sa version sauvegardé. Comme un célèbre framework de persistence,
                 Couchbase possède un mécanisme interner pour gérer cette problématique à l'aide de lock optimiste.</p>
                 <p class="solution">
                     Aide : Vous pouvez regarder la méthode appelée <a href = "http://docs.couchbase.com/couchbase-devguide-2.5/#cb-cas">"check and set"</a>.
                 </p>
+                
                 <h2>Exercice 5 : Apprendre à compter</h2>
-                <p>Vous souhaitez compter le nombre de fois qu'une utilisateur requête son profil. Mais cette fois, c'est une donnée qui va souvent évoluer et le verrou n'est pas la solution satisfaisante.</p>
-                <p>A travers la console web Couchbase, créez le document "user_document_retrieval_count" contenant la valeur 0.</p>
+                <p>Vous souhaitez compter le nombre de fois qu'un utilisateur requête son profil. Mais cette fois, c'est une donnée qui va souvent évoluer et le verrou n'est pas la solution satisfaisante. Par chance, couchbase supporte les opérations atomiques. (un peu comme les séquences oracle ou postgre)</p>
+                <p>A travers la console web Couchbase, créez le document "user_document_retrieval_count" contenant la valeur 0. Puis, pour chaque appel à la méthode findUser, incrémenter votre compteur de 1</p>
+
+                <p class="solution">
+                    Aide : Vous pouvez regarder les méthodes incr et decr du client couchbase</a>.
+                </p>
+
 
                 <h2>Exercice 6 : Insertion massive</h2>
                 <p>Maintenant que votre application roxx, vous souhaitez ajouter les 1 000 clients privilégiés qui utiliseront l'application les premiers.</p>
@@ -151,6 +160,7 @@ $ rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                 <p>Maintenant que votre vue vous paraît satisfaisante, nous allons créer deux autres vues dans le même design document (un design document et un regroupement de vues, promues en mode "production" au même moment).</p>
                 <p>Nos deux autres vues seront active_user et inactive_user et auront pour rôles de faire ce que leurs noms indiquent.</p>
                 <p>Une fois l'édition de vos vues terminées et testées, vous pouvez "publier" votre vue.</p>
+                
                 <h2>Exercice 8 : Modifiez un design document</h2>
                 <p>Vous souhaitez maintenant ajouter une vue pour compter le nombre d'utilisateurs inactifs. Pour cela, vous devez copier le design document en mode développement.</p>
 
