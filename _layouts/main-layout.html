@@ -127,11 +127,13 @@ $ git checkout user-profile
                 <p>
                 Rendez vous dans la console web Couchbase et créez une vue permettant de déterminer :
                 <ul> 
+                    <li>le nom de famille de l'utilisateur (stocké dans la clé de la vue)</li>
                     <li>l'id de l'utilisateur (userId);</li>
                     <li>les prénoms/noms de l'utilisateur (dans userName);</li>
                     <li>la ville (cityName);</li> 
                     <li>si ce dernier est actif ou non (active);</li>
                 </ul>
+                
                 Vous devrez tout d'abord créer une vue en mode développement afin de tester votre vue.
                 </p>
                 <p>Pour décrire une vue, on utilise le paradigme de map/reduce. Map est la fonction telle que select en sql. Reduce est une fonction d'aggrégation, comme un count. Ces deux fonctions s'écrivent en javascript.</p>
