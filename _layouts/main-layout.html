@@ -112,7 +112,8 @@ $ rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                     <li>Enable flush (pour permettre de vider le bucket au besoin)</li>
                 </ul>
                 <h2>Exercice 3 : Insertion du profil utilisateur</h2>
-                <p>L'application que vous récupérez dispose de profils utilisateur. Le test suivant définit un utilisateur que vous devrez insérer en base grâce à l'API couchbase.
+                <p>L'application que vous récupérez dispose de profils utilisateur. Le test suivant définit un utilisateur que vous devrez insérer en base grâce à l'API couchbase (UserRepositoryTest). Pour rappel, couchbase stocke
+                les objets au format JSON. vous pouvez utiliser l'api Gson (ou autre) pour le sérialiser.
                 </p>
                 <h2>Exercice 4 : Modifications concurrentes</h2>
                 <p>Différentes solutions vous sont offertes pour modifier vos données en évitant un conflit. Vous utiliserez ici la méthode appelée "check and set", n'étant ni plus ni moins qu'un verrou optimiste.
