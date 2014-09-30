@@ -116,7 +116,11 @@ $ rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                 les objets au format JSON. vous pouvez utiliser l'api Gson (ou autre) pour le sérialiser.
                 </p>
                 <h2>Exercice 4 : Modifications concurrentes</h2>
-                <p>Différentes solutions vous sont offertes pour modifier vos données en évitant un conflit. Vous utiliserez ici la méthode appelée "check and set", n'étant ni plus ni moins qu'un verrou optimiste.
+                <p>Lorsque deux utilisateurs modifient le même document en même temps, c'est en général celui qui le "commit" le dernier qui voir sa version sauvegardé. Comme un célèbre framework de persistence,
+                Couchbase possède un mécanisme interner pour gérer cette problématique à l'aide de lock optimiste.</p>
+                <p>
+                    Aide : Vous pouvez regarder la méthode appelée "check and set".
+                </p>
                 <h2>Exercice 5 : Apprendre à compter</h2>
                 <p>Vous souhaitez compter le nombre de fois qu'une utilisateur requête son profil. Mais cette fois, c'est une donnée qui va souvent évoluer et le verrou n'est pas la solution satisfaisante.</p>
                 <p>A travers la console web Couchbase, créez le document "user_document_retrieval_count" contenant la valeur 0.</p>
