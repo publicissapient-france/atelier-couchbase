@@ -155,12 +155,12 @@ $ rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                     <li>si ce dernier est actif ou non (active);</li>
                 </ul>
                 
-                Vous devrez tout d'abord créer une vue en mode développement afin de tester votre vue.
+                Vous appellerez votre vue <strong>user</strong>. Vous devrez tout d'abord créer une vue en mode développement afin de tester votre vue.
                 </p>
                 <p>Pour décrire une vue, on utilise le paradigme de map/reduce. Map est la fonction telle que select en sql. Reduce est une fonction d'aggrégation, comme un count. Ces deux fonctions s'écrivent en javascript.</p>
                 <p>Pour tester votre vue, vous pouvez sauvegarder votre fonction de map, puis cliquer sur "show results".</p>
                 <p>Maintenant que votre vue vous paraît satisfaisante, nous allons créer deux autres vues dans le même design document (un design document et un regroupement de vues, promues en mode "production" au même moment).</p>
-                <p>Nos deux autres vues seront active_user et inactive_user et auront pour rôles de faire ce que leurs noms indiquent.</p>
+                <p>Nos deux autres vues seront <strong>active_user</strong> et <strong>inactive_user</strong> et auront pour rôles de faire ce que leurs noms indiquent.</p>
                 <p>Une fois l'édition de vos vues terminées et testées, vous pouvez "publier" votre vue.</p>
                 
                 <p class = "solution">
@@ -168,7 +168,10 @@ $ rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                 </p>
                 
                 <h2>Exercice 8 : Modifiez un design document</h2>
-                <p>Vous souhaitez maintenant ajouter une vue pour compter le nombre d'utilisateurs inactifs. Pour cela, vous devez copier le design document en mode développement.</p>
+                <p>Vous souhaitez maintenant ajouter une vue <strong>number_of_inactive_users</strong> pour compter le nombre d'utilisateurs inactifs. Pour cela, vous devez copier le design document en mode développement.</p>
+                <p class="solution">
+                    Pour cela, vous pouvez émettre un document vide et utiliser la fonction prédéfinie _count dans la partie reduce
+                </p>
 
                 <h2>Exercice 9 : Les vues dans l'application</h2>
                 <p>Récupérez ces vues depuis l'application.
