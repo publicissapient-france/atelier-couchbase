@@ -65,6 +65,8 @@ $ mvn clean compile
                 </p>
 
 {% highlight bash %}
+$ chmod 600 key/couchbase-xke.pem
+$ ssh -i key/couchbase-xke.pem {{page.group}}-couchbase-workshop.aws.xebiatechevent.info
 $ wget http://packages.couchbase.com/releases/2.5.1/couchbase-server-enterprise_2.5.1_x86_64.rpm
 $ sudo rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
 {% endhighlight %}
