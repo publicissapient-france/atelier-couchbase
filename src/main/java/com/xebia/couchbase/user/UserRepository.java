@@ -16,7 +16,6 @@ import static com.xebia.couchbase.Configuration.PUBLICOTAURUS_CLIENT;
 
 public class UserRepository {
     private static final Logger logger = LoggerFactory.getLogger(UserRepository.class);
-    public static final String USER_DOCUMENT_PREFIX = "user::v1::";
     private final Gson gson;
 
     public UserRepository() {
@@ -28,14 +27,14 @@ public class UserRepository {
         final UserProfile userProfile = user.getUserProfile();
         OperationFuture<Boolean> future;
         do {
-            final String userDocumentId = String.format("%s%s_%s", USER_DOCUMENT_PREFIX, userProfile.getFirstName().toLowerCase(), userProfile.getLastName().toLowerCase());
+            final String userDocumentId = String.format("%s_%s", userProfile.getFirstName().toLowerCase(), userProfile.getLastName().toLowerCase());
             future = PUBLICOTAURUS_CLIENT.set(userDocumentId, gson.toJson(user));
         } while (!future.get());
     }
 
     //TODO Exercice 3, puis Exercice 5
     public User findUser(String id) throws java.io.IOException {
-        final User user = documentToJson(PUBLICOTAURUS_CLIENT.get(USER_DOCUMENT_PREFIX + id));
+        final User user = documentToJson(PUBLICOTAURUS_CLIENT.get(id));
         PUBLICOTAURUS_CLIENT.incr("user_document_retrieval_count", 1, 0);
         return user;
     }

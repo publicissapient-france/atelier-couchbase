@@ -24,7 +24,7 @@ public class UserViewTest {
     //Exercice 9
     public void should_retrieve_user_from_moderator_point_of_view() throws Exception {
         // Given
-        disableAnUser("user::v1::adrian_vincent");
+        disableAnUser("adrian_vincent");
 
         // When
         final ViewResponse inactiveUserResponse = UserView.getInactiveUsers();
@@ -33,7 +33,7 @@ public class UserViewTest {
         final ViewRow userViewRow = inactiveUserResponse.iterator().next();
         assertThat(userViewRow).isNotNull();
         assertThat(userViewRow.getKey()).isEqualTo("VINCENT");
-        assertThat(userViewRow.getValue()).isEqualTo("{\"userId\":\"user::v1::adrian_vincent\"," +
+        assertThat(userViewRow.getValue()).isEqualTo("{\"userId\":\"adrian_vincent\"," +
                 "\"userName\":\"ADRIAN VINCENT\",\"cityName\":\"San Diego\",\"active\":false}");
     }
 
@@ -45,11 +45,11 @@ public class UserViewTest {
         // Then
         ViewRow userViewRow = activeUserView.nextPage().iterator().next();
         assertThat(userViewRow).isNotNull();
-        assertThat(userViewRow.getKey()).isEqualTo("user::v1::aaliyah_scott");
+        assertThat(userViewRow.getKey()).isEqualTo("aaliyah_scott");
 
         userViewRow = activeUserView.nextPage().iterator().next();
         assertThat(userViewRow).isNotNull();
-        assertThat(userViewRow.getKey()).isEqualTo("user::v1::arielle_le");
+        assertThat(userViewRow.getKey()).isEqualTo("arielle_le");
     }
 
     public void disableAnUser(String userId) throws IOException {

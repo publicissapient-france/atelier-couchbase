@@ -44,7 +44,7 @@ public class UserReaderFromCsv {
         final List<String> keys = new ArrayList<>();
 
         for (CSVRecord line : getCsvRecords(usersFileName)) {
-            keys.add("user::v1::" + line.get(0).toLowerCase() + "_" + line.get(1).toLowerCase());
+            keys.add(line.get(0).toLowerCase() + "_" + line.get(1).toLowerCase());
         }
 
         return keys;

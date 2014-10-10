@@ -36,7 +36,7 @@ public class UserRepositoryTest {
                                 .build()).build()).build();
 
         userRepository.insertUser(user);
-        final User resultUser = findUser("user::v1::antoine_michaud");
+        final User resultUser = findUser("antoine_michaud");
         resultUser.getUserProfile().setSummary("Java Developer");
         assertThat(resultUser).isEqualTo(user);
     }
@@ -44,7 +44,7 @@ public class UserRepositoryTest {
     @Test
     //Exercice 4
     public void should_update_with_an_optimistic_lock() throws Exception {
-        final String userKey = "user::v1::antoine_michaud";
+        final String userKey = "antoine_michaud";
         final UserWithCas user1 = userRepository.findUserWithCas(userKey);
         final UserWithCas user2 = userRepository.findUserWithCas(userKey);
         user1.getUser().getUserProfile().setSummary("Couchbase Developer");
