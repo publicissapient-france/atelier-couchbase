@@ -12,7 +12,27 @@ public class Configuration {
     public static final CouchbaseEnvironment COUCHBASE_ENVIRONMENT =
             DefaultCouchbaseEnvironment.builder().build();
 
-    public static final String PUBLICOTAURUS_BUCKET = "publicotaurus";
+    public static final String PUBLICOTAURUS_BUCKET_NAME = "publicotaurus";
+    private static Bucket PUBLICOTAURUS_BUCKET = null;
+
     public static final CouchbaseCluster couchbaseCluster = CouchbaseCluster.create(COUCHBASE_ENVIRONMENT, COUCHBASE_SERVER_ADDRESS);
-    public static final Bucket userBucket = Configuration.couchbaseCluster.openBucket(Configuration.PUBLICOTAURUS_BUCKET);
+    public static final String DEFAULT_BUCKET_NAME = "default";
+    private static Bucket DEFAULT_BUCKET = null;
+
+    public static Bucket publicotaurusBucket() {
+        return getBucketOfName(PUBLICOTAURUS_BUCKET, PUBLICOTAURUS_BUCKET_NAME);
+    }
+
+    public static Bucket defaultBucket() {
+        return getBucketOfName(DEFAULT_BUCKET, DEFAULT_BUCKET_NAME);
+    }
+
+    public static Bucket getBucketOfName(Bucket bucket, String bucketName) {
+        if (bucket == null) {
+            bucket = couchbaseCluster.openBucket(bucketName);
+        }
+
+        return bucket;
+    }
+
 }

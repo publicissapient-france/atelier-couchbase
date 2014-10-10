@@ -1,7 +1,5 @@
 package com.xebia.couchbase.moderation;
 
-import com.couchbase.client.java.query.Query;
-import com.couchbase.client.java.query.dsl.Expression;
 import com.couchbase.client.java.view.ViewQuery;
 import com.couchbase.client.java.view.ViewResult;
 import com.xebia.couchbase.Configuration;
@@ -9,7 +7,7 @@ import org.junit.Test;
 
 import static com.couchbase.client.java.query.Select.select;
 import static com.couchbase.client.java.query.dsl.Expression.x;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserViewRepositoryTest {
     @Test
@@ -17,7 +15,7 @@ public class UserViewRepositoryTest {
         // Given
         // When
         final ViewResult activeUsers =
-                Configuration.PUBLICOTAURUS_BUCKET.query(ViewQuery.from("moderator", "inactive_user"));
+                Configuration.publicotaurusBucket().query(ViewQuery.from("moderator", "inactive_user"));
 
         // Then
         assertThat(activeUsers.allRows().get(0)).isNotNull();
@@ -28,7 +26,7 @@ public class UserViewRepositoryTest {
         // Given
 
         // When
-        Configuration.PUBLICOTAURUS_BUCKET
+        Configuration.publicotaurusBucket()
                 .async()
                 .query(
                         select("*").from(Configuration.PUBLICOTAURUS_BUCKET_NAME).where(x("active").is(x(false))))

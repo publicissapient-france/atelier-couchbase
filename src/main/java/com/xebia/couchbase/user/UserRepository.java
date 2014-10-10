@@ -26,22 +26,22 @@ public class UserRepository {
         final JsonDocument userJsonDocument = JsonDocument.create(userDocumentId, userJsonObject);
 
         try {
-            Configuration.PUBLICOTAURUS_BUCKET.insert(userJsonDocument);
+            Configuration.publicotaurusBucket().insert(userJsonDocument);
         } catch (CASMismatchException e) {
             //Test should be ok if document has already been inserted
         }
     }
 
     public void updateUser(JsonDocument user) {
-        Configuration.PUBLICOTAURUS_BUCKET.replace(user);
+        Configuration.publicotaurusBucket().replace(user);
     }
 
     public JsonDocument getAndLock(String userId) {
-        return Configuration.PUBLICOTAURUS_BUCKET.getAndLock(USER_DOCUMENT_PREFIX + userId, 5);
+        return Configuration.publicotaurusBucket().getAndLock(USER_DOCUMENT_PREFIX + userId, 5);
     }
 
     public JsonDocument findUser(String userId) {
         counterRepository.incrementUserDocumentRetrieval();
-        return Configuration.PUBLICOTAURUS_BUCKET.get(userId);
+        return Configuration.publicotaurusBucket().get(userId);
     }
 }

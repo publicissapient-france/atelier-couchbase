@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import java.util.Collection;
 
-import static com.xebia.couchbase.Configuration.PUBLICOTAURUS_BUCKET;
+import static com.xebia.couchbase.Configuration.publicotaurusBucket;
 import static com.xebia.couchbase.location.AddressBuilder.anAddress;
 import static com.xebia.couchbase.user.UserBuilder.anUser;
 import static com.xebia.couchbase.user.UserProfileBuilder.anUserProfile;
@@ -26,17 +26,11 @@ public class UserRepositoryTest {
 
     private static UserRepository userRepository;
     private static Gson gson;
-    private CounterRepository counterRepository;
 
     @BeforeClass
     public static void staticSetUp() throws Exception {
         userRepository = new UserRepository();
         gson = new Gson();
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        counterRepository = new CounterRepository();
     }
 
     @Test
@@ -77,7 +71,7 @@ public class UserRepositoryTest {
     public void should_count_number_of_document_retrieval() throws Exception {
         // Given
 
-        final StringDocument userDocumentRetrievalCountDocument = PUBLICOTAURUS_BUCKET
+        final StringDocument userDocumentRetrievalCountDocument = publicotaurusBucket()
                 .get("user_document_retrieval_count", StringDocument.class);
 
         Long userDocumentRetrievalCount = userDocumentRetrievalCountDocument != null
@@ -88,7 +82,7 @@ public class UserRepositoryTest {
         userRepository.findUser("antoine_michaud");
 
         // Then
-        final Long eventualUserDocumentRetrievalCount = parseLong(PUBLICOTAURUS_BUCKET
+        final Long eventualUserDocumentRetrievalCount = parseLong(publicotaurusBucket()
                 .get("user_document_retrieval_count", StringDocument.class)
                 .content());
         assertThat(eventualUserDocumentRetrievalCount).isEqualTo(userDocumentRetrievalCount + 1);
@@ -119,6 +113,6 @@ public class UserRepositoryTest {
     }
 
     private JsonDocument findDocument(String id) {
-        return PUBLICOTAURUS_BUCKET.get(id);
+        return publicotaurusBucket().get(id);
     }
 }
