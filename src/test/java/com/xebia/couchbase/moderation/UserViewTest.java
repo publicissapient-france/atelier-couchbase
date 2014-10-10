@@ -2,6 +2,7 @@ package com.xebia.couchbase.moderation;
 
 import com.couchbase.client.protocol.views.ViewResponse;
 import com.couchbase.client.protocol.views.ViewRow;
+import com.google.common.collect.Iterables;
 import com.xebia.couchbase.user.UserRepository;
 import com.xebia.couchbase.user.UserWithCas;
 import org.junit.Before;
@@ -30,7 +31,7 @@ public class UserViewTest {
         final ViewResponse inactiveUserResponse = UserView.getInactiveUsers();
 
         // Then
-        final ViewRow userViewRow = inactiveUserResponse.iterator().next();
+        final ViewRow userViewRow = Iterables.getFirst(inactiveUserResponse, null);
         assertThat(userViewRow).isNotNull();
         assertThat(userViewRow.getKey()).isEqualTo("VINCENT");
         assertThat(userViewRow.getValue()).isEqualTo("{\"userId\":\"adrian_vincent\"," +
@@ -43,11 +44,11 @@ public class UserViewTest {
         final UserView activeUserView = UserView.getPaginatedActiveUsers();
 
         // Then
-        ViewRow userViewRow = activeUserView.nextPage().iterator().next();
+        ViewRow userViewRow = Iterables.getFirst(activeUserView.nextPage(), null);
         assertThat(userViewRow).isNotNull();
         assertThat(userViewRow.getKey()).isEqualTo("aaliyah_scott");
 
-        userViewRow = activeUserView.nextPage().iterator().next();
+        userViewRow = Iterables.getFirst(activeUserView.nextPage(), null);
         assertThat(userViewRow).isNotNull();
         assertThat(userViewRow.getKey()).isEqualTo("arielle_le");
     }
