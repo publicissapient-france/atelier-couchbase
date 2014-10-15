@@ -14,6 +14,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.xebia.couchbase.Configuration.publicotaurusBucket;
+import static com.xebia.couchbase.Configuration.reinitConnection;
 import static com.xebia.couchbase.location.AddressBuilder.anAddress;
 import static com.xebia.couchbase.user.UserBuilder.anUser;
 import static com.xebia.couchbase.user.UserProfileBuilder.anUserProfile;
@@ -95,8 +96,24 @@ public class UserRepositoryTest {
     @Test
     public void should_insert_a_bulk_of_users() throws Exception {
         final List<User> users = UserReaderFromCsv.getUsersFrom("users.csv");
+        for (User user : users) {
+            try {
+                safeInsertion(user);
+            } catch (Exception e) {
+                System.out.println("Client planté. Réinitialisation de la connexion à la base.");
+                reinitConnection();
+                // Reprise du document planté après réinitialisation de la connexion
+                safeInsertion(user);
+            }
+        }
+    }
 
-        userRepository.insertBulkOfUsers(users);
+    private void safeInsertion(User user) throws Exception {
+        try {
+            userRepository.insertUser(user);
+        } catch (DocumentAlreadyExistsException e) {
+            System.out.println("Document déjà inséré. On continue...");
+        }
     }
 
     private User findUser(String id) throws java.io.IOException {
