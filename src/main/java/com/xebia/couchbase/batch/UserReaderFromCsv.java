@@ -11,17 +11,18 @@ import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.List;
 
 public class UserReaderFromCsv {
 
     private static final Logger logger = LoggerFactory.getLogger(UserReaderFromCsv.class);
 
-    public static Collection<User> getUsersFrom(String usersFileName) {
-        final ArrayList<User> users = new ArrayList<>();
+    public static List<User> getUsersFrom(String usersFileName) {
+        final List<User> users = new ArrayList<>();
 
         try {
             final InputStream inputStream = UserReaderFromCsv.class.getResourceAsStream("/" + usersFileName);

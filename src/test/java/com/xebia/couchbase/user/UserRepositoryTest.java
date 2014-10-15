@@ -1,6 +1,5 @@
 package com.xebia.couchbase.user;
 
-import com.couchbase.client.core.RequestCancelledException;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.StringDocument;
 import com.couchbase.client.java.error.CASMismatchException;
@@ -9,11 +8,10 @@ import com.google.gson.Gson;
 import com.xebia.couchbase.batch.UserReaderFromCsv;
 import com.xebia.couchbase.location.City;
 import com.xebia.couchbase.location.Country;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.Collection;
+import java.util.List;
 
 import static com.xebia.couchbase.Configuration.publicotaurusBucket;
 import static com.xebia.couchbase.location.AddressBuilder.anAddress;
@@ -76,7 +74,7 @@ public class UserRepositoryTest {
 
         Long userDocumentRetrievalCount = userDocumentRetrievalCountDocument != null
                 ? parseLong(userDocumentRetrievalCountDocument.content())
-                : 0L;
+                : -1L;
 
         // When
         userRepository.findUser("antoine_michaud");
@@ -96,15 +94,9 @@ public class UserRepositoryTest {
 
     @Test
     public void should_insert_a_bulk_of_users() throws Exception {
-        final Collection<User> users = UserReaderFromCsv.getUsersFrom("users.csv");
+        final List<User> users = UserReaderFromCsv.getUsersFrom("users.csv");
 
-        for (User user : users) {
-            try {
-                userRepository.insertUser(user);
-            } catch (DocumentAlreadyExistsException | RequestCancelledException e) {
-                // Good enough if user has already been inserted
-            }
-        }
+        userRepository.insertBulkOfUsers(users);
     }
 
     private User findUser(String id) throws java.io.IOException {
