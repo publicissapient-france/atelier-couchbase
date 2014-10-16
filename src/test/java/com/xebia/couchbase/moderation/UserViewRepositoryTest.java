@@ -1,5 +1,6 @@
 package com.xebia.couchbase.moderation;
 
+import com.couchbase.client.java.view.Stale;
 import com.couchbase.client.java.view.ViewQuery;
 import com.couchbase.client.java.view.ViewResult;
 import com.xebia.couchbase.Configuration;
@@ -15,7 +16,7 @@ public class UserViewRepositoryTest {
         // Given
         // When
         final ViewResult activeUsers =
-                Configuration.publicotaurusBucket().query(ViewQuery.from("moderator", "inactive_user"));
+                Configuration.publicotaurusBucket().query(ViewQuery.from("moderator", "inactive_user").stale(Stale.FALSE));
 
         // Then
         assertThat(activeUsers.allRows().get(0)).isNotNull();
