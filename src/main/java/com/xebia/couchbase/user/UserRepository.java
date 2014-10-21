@@ -29,19 +29,6 @@ public class UserRepository {
         }
     }
 
-    public JsonDocument userToDocument(User user) {
-        final JsonObject userJsonObject;
-        try {
-            userJsonObject = jsonTranscoder.stringToJsonObject(gson.toJson(user));
-            final UserProfile userProfile = user.getUserProfile();
-            final String userDocumentId = computeUserId(userProfile.getFirstName(), userProfile.getLastName());
-            return JsonDocument.create(userDocumentId, userJsonObject);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public void updateUser(JsonDocument user) {
         Configuration.publicotaurusBucket().replace(user);
     }
@@ -57,6 +44,19 @@ public class UserRepository {
 
     private String computeUserId(String firstName, String lastName) {
         return String.format("%s%s_%s", USER_DOCUMENT_PREFIX, firstName.toLowerCase(), lastName.toLowerCase());
+    }
+
+    private JsonDocument userToDocument(User user) {
+        final JsonObject userJsonObject;
+        try {
+            userJsonObject = jsonTranscoder.stringToJsonObject(gson.toJson(user));
+            final UserProfile userProfile = user.getUserProfile();
+            final String userDocumentId = computeUserId(userProfile.getFirstName(), userProfile.getLastName());
+            return JsonDocument.create(userDocumentId, userJsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
