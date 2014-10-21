@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import com.xebia.couchbase.Configuration;
 
 public class UserRepository {
-    public static final String USER_DOCUMENT_PREFIX = "user::v1::";
+    public static final String USER_DOCUMENT_PREFIX = "user::";
     private final Gson gson;
     private final JsonTranscoder jsonTranscoder;
     private final CounterRepository counterRepository;
@@ -17,19 +17,6 @@ public class UserRepository {
         jsonTranscoder = new JsonTranscoder();
         gson = new Gson();
         counterRepository = new CounterRepository();
-    }
-
-    public JsonDocument userToDocument(User user) {
-        final JsonObject userJsonObject;
-        try {
-            userJsonObject = jsonTranscoder.stringToJsonObject(gson.toJson(user));
-            final UserProfile userProfile = user.getUserProfile();
-            final String userDocumentId = String.format("%s%s_%s", USER_DOCUMENT_PREFIX, userProfile.getFirstName().toLowerCase(), userProfile.getLastName().toLowerCase());
-            return JsonDocument.create(userDocumentId, userJsonObject);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public void insertUser(User user) throws Exception {
@@ -42,17 +29,34 @@ public class UserRepository {
         }
     }
 
+    public JsonDocument userToDocument(User user) {
+        final JsonObject userJsonObject;
+        try {
+            userJsonObject = jsonTranscoder.stringToJsonObject(gson.toJson(user));
+            final UserProfile userProfile = user.getUserProfile();
+            final String userDocumentId = computeUserId(userProfile.getFirstName(), userProfile.getLastName());
+            return JsonDocument.create(userDocumentId, userJsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void updateUser(JsonDocument user) {
         Configuration.publicotaurusBucket().replace(user);
     }
 
-    public JsonDocument getAndLock(String userId) {
-        return Configuration.publicotaurusBucket().getAndLock(USER_DOCUMENT_PREFIX + userId, 5);
+    public JsonDocument getAndLock(String firstName, String lastName) {
+        return Configuration.publicotaurusBucket().getAndLock(USER_DOCUMENT_PREFIX + computeUserId(firstName, lastName), 5);
     }
 
-    public JsonDocument findUser(String userId) {
+    public JsonDocument findUser(String firstName, String lastName) {
         counterRepository.incrementUserDocumentRetrieval();
-        return Configuration.publicotaurusBucket().get(userId);
+        return Configuration.publicotaurusBucket().get(computeUserId(firstName, lastName));
+    }
+
+    private String computeUserId(String firstName, String lastName) {
+        return String.format("%s%s_%s", USER_DOCUMENT_PREFIX, firstName.toLowerCase(), lastName.toLowerCase());
     }
 
 }

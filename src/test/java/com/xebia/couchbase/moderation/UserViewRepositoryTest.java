@@ -40,4 +40,10 @@ public class UserViewRepositoryTest {
         // Then
 
     }
+
+//    public void disableAnUser(String userId) throws IOException {
+//        final UserWithCas userWithCas = userRepository.findUserWithCas(userId);
+//        userWithCas.getUser().setActive(false);
+//        userRepository.updateUser(userId, userWithCas.getCasId(), userWithCas.getUser());
+//    }
 }

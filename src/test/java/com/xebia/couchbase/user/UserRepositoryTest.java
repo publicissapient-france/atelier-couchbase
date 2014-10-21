@@ -33,7 +33,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void should_insert_user_in_database() throws Exception {
+    public void should_insert_user_and_retrieve_an_user_in_database() throws Exception {
         final User user = anUser().withUserProfile(
                 anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
                         .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
@@ -42,18 +42,19 @@ public class UserRepositoryTest {
         try {
             userRepository.insertUser(user);
         } catch (DocumentAlreadyExistsException e) {
-            //TODO remove document at the end of the test => no more try catch
             // If the document already exists
         }
-        final User resultUser = findUser("user::v1::antoine_michaud");
+        final JsonDocument resultDocument = userRepository.findUser("Antoine", "Michaud");
+        final User resultUser = fromDocumentToUser(resultDocument);
         resultUser.getUserProfile().setSummary("Java Developer");
         assertThat(resultUser).isEqualTo(user);
+        assertThat(resultDocument.id()).isEqualTo("user::antoine_michaud");
     }
 
     @Test
     public void should_update_with_an_optimistic_lock() throws Exception {
-        final JsonDocument user1 = findDocument("user::v1::antoine_michaud");
-        final JsonDocument user2 = findDocument("user::v1::antoine_michaud");
+        final JsonDocument user1 = userRepository.findUser("Antoine", "Michaud");
+        final JsonDocument user2 = userRepository.findUser("Antoine", "Michaud");
         user1.content().getObject("userProfile").put("summary", "Couchbase Developer");
         user2.content().getObject("userProfile").put("summary", "PHP Developer");
 
@@ -78,7 +79,7 @@ public class UserRepositoryTest {
                 : -1L;
 
         // When
-        userRepository.findUser("antoine_michaud");
+        userRepository.findUser("Antoine", "Michaud");
 
         // Then
         final Long eventualUserDocumentRetrievalCount = parseLong(publicotaurusBucket()
@@ -89,8 +90,8 @@ public class UserRepositoryTest {
 
     @Test
     public void should_not_allow_read_during_edition() throws Exception {
-        assertThat(userRepository.getAndLock("antoine_michaud")).isNotNull();
-        assertThat(userRepository.getAndLock("antoine_michaud")).isNull();
+        assertThat(userRepository.getAndLock("Antoine", "Michaud")).isNotNull();
+        assertThat(userRepository.getAndLock("Antoine", "Michaud")).isNull();
     }
 
     @Test
@@ -116,12 +117,11 @@ public class UserRepositoryTest {
         }
     }
 
-    private User findUser(String id) throws java.io.IOException {
+    private User fromDocumentToUser(JsonDocument userJsonDocument) throws java.io.IOException {
         return gson.getAdapter(User.class).fromJson(
-                findDocument(id).content().toString());
+                userJsonDocument.content().toString());
     }
 
-    private JsonDocument findDocument(String id) {
-        return publicotaurusBucket().get(id);
-    }
+
+
 }
