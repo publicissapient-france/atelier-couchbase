@@ -3,9 +3,14 @@ package com.xebia.couchbase.user;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
 import com.couchbase.client.java.error.CASMismatchException;
+import com.couchbase.client.java.error.DocumentAlreadyExistsException;
 import com.couchbase.client.java.transcoder.JsonTranscoder;
 import com.google.gson.Gson;
 import com.xebia.couchbase.Configuration;
+
+import java.util.List;
+
+import static com.xebia.couchbase.Configuration.reinitConnection;
 
 public class UserRepository {
     public static final String USER_DOCUMENT_PREFIX = "user::";
@@ -34,12 +39,33 @@ public class UserRepository {
     }
 
     public JsonDocument getAndLock(String firstName, String lastName) {
-        return Configuration.publicotaurusBucket().getAndLock(USER_DOCUMENT_PREFIX + computeUserId(firstName, lastName), 5);
+        return Configuration.publicotaurusBucket().getAndLock(computeUserId(firstName, lastName), 5);
     }
 
     public JsonDocument findUser(String firstName, String lastName) {
         counterRepository.incrementUserDocumentRetrieval();
         return Configuration.publicotaurusBucket().get(computeUserId(firstName, lastName));
+    }
+
+    public void insertBulkOfUsers(List<User> users) throws Exception {
+        for (User user : users) {
+            try {
+                safeInsertion(user);
+            } catch (Exception e) {
+                System.out.println("Client planté. Réinitialisation de la connexion à la base.");
+                reinitConnection();
+                // Reprise du document planté après réinitialisation de la connexion
+                safeInsertion(user);
+            }
+        }
+    }
+
+    private void safeInsertion(User user) throws Exception {
+        try {
+            insertUser(user);
+        } catch (DocumentAlreadyExistsException e) {
+            System.out.println("Document déjà inséré. On continue...");
+        }
     }
 
     private String computeUserId(String firstName, String lastName) {
@@ -58,5 +84,4 @@ public class UserRepository {
             return null;
         }
     }
-
 }
