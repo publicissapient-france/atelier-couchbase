@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.Map;
 
+import static com.google.common.collect.Iterables.getFirst;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserViewRepositoryTest {
@@ -18,7 +19,7 @@ public class UserViewRepositoryTest {
         final ViewResult inactiveUsers = UserView.getInactiveUsers();
 
         // Then
-        final ViewRow userViewRow = inactiveUsers.allRows().get(0);
+        final ViewRow userViewRow = getFirst(inactiveUsers.allRows(), null);
         assertThat(userViewRow).isNotNull();
         assertThat(userViewRow.key()).isEqualTo("VINCENT");
 
@@ -34,7 +35,17 @@ public class UserViewRepositoryTest {
     @Test
     //Exercice 10
     public void should_paginate() throws Exception {
+        // When
+        final UserView activeUserView = UserView.getPaginatedActiveUsers(100);
 
+        // Then
+        ViewRow userViewRow = getFirst(activeUserView.nextPage(), null);
+        assertThat(userViewRow).isNotNull();
+        assertThat(userViewRow.key()).isEqualTo("ABBOTT");
+
+        userViewRow = getFirst(activeUserView.nextPage(), null);
+        assertThat(userViewRow).isNotNull();
+        assertThat(userViewRow.key()).isEqualTo("ACEVEDO");
     }
 
     //    public void disableAnUser(String userId) throws IOException {
