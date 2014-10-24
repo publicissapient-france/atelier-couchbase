@@ -12,10 +12,10 @@ import static com.google.common.collect.Iterables.getFirst;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserViewRepositoryTest {
+
     @Test
     public void should_retrieve_user_from_moderator_point_of_view() throws Exception {
-        // Given
-        // When
+        // Given / When
         final ViewResult inactiveUsers = UserView.getInactiveUsers();
 
         // Then
@@ -29,7 +29,7 @@ public class UserViewRepositoryTest {
                 .put("cityName", "San Diego")
                 .put("active", false)
                 .build();
-        assertThat(((JsonObject)userViewRow.value()).toMap()).isEqualTo(expectedJsonMap);
+        assertThat(((JsonObject) userViewRow.value()).toMap()).isEqualTo(expectedJsonMap);
     }
 
     @Test
@@ -45,14 +45,17 @@ public class UserViewRepositoryTest {
 
         userViewRow = getFirst(activeUserView.nextPage(), null);
         assertThat(userViewRow).isNotNull();
-        assertThat(userViewRow.key()).isEqualTo("ACEVEDO");
+        assertThat(userViewRow.key()).isEqualTo("BRADY");
     }
 
-    //    public void disableAnUser(String userId) throws IOException {
-//        final UserWithCas userWithCas = userRepository.findUserWithCas(userId);
-//        userWithCas.getUser().setActive(false);
-//        userRepository.updateUser(userId, userWithCas.getCasId(), userWithCas.getUser());
-//    }
+    @Test
+    public void should_disable_an_user() throws Exception {
+        final String userName = "KLINE";
+
+        UserView.disableUser(userName);
+
+        assertThat(UserView.getInactiveUsers().allRows()).hasSize(2);
+    }
 
 //    @Test
 //    public void should_retrieve_most_present_cities() throws Exception {
