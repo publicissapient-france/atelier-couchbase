@@ -1,7 +1,6 @@
 package com.xebia.couchbase.moderation;
 
 import com.couchbase.client.protocol.views.*;
-import com.google.gson.Gson;
 
 import static com.xebia.couchbase.Configuration.PUBLICOTAURUS_CLIENT;
 
@@ -10,7 +9,6 @@ public class UserView {
     //TODO Exercice 9.1 : Récupérer les vues
     private static final View inactiveUserView = PUBLICOTAURUS_CLIENT.getView("moderator", "inactive_user");
     private static final View activeUserView = PUBLICOTAURUS_CLIENT.getView("moderator", "active_user");
-    private static final Gson gson = new Gson();
     //TODO Exercice 10.1 : Stocker un attribut permettant d'itérer sur les résultats
     private Paginator activeUserResponsePaginator;
 

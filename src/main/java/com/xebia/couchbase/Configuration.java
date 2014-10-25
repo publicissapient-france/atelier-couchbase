@@ -18,7 +18,7 @@ public class Configuration {
     private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
 
     //TODO Exercice 1 configure your client to use your default bucket
-    public static final String ip = "adrastea-couchbase-workshop.aws.xebiatechevent.info";
+    public static final String ip = "localhost";
 
     public static final String DEFAULT_BUCKET_NAME = "default";
     public static final CouchbaseClient DEFAULT_CLIENT = initClient(DEFAULT_BUCKET_NAME);

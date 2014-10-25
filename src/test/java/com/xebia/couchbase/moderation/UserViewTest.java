@@ -25,7 +25,7 @@ public class UserViewTest {
     //Exercice 9
     public void should_retrieve_user_from_moderator_point_of_view() throws Exception {
         // Given
-        disableAnUser("adrian_vincent");
+        disableAnUser("user::v1::adrian_vincent");
 
         // When
         final ViewResponse inactiveUserResponse = UserView.getInactiveUsers();
