@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
         <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen">
         <link rel="stylesheet" type="text/css" href="../stylesheets/print.css" media="print">
-        
+
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="../javascripts/main.js"></script>
 
@@ -42,47 +42,53 @@
                 <h2>L'application</h2>
                 <p>
                 Vous êtes chargé de mettre en place un POC démontrant l'efficacité de Couchbase. Robert  a mis à votre disposition <a href="https://github.com/xebia-france/atelier-couchbase">la beta de l'application</a> que vous vous empressez de récupérer sur votre poste, dans le workspace de votre choix. Puis vous buildez l'application avec maven, comme à votre habitude. Cela vous permet aussi de télécharger toutes les dépendances car comme vous le savez, la connexion wifi de votre entreprise n'est pas glorieuse...
-                </p> 
-
-{% highlight bash %}
-$ git clone https://github.com/xebia-france/atelier-couchbase.git
-$ cd atelier-couchbase
-$ mvn clean compile
-{% endhighlight %}
-
+                <h4>Votre mission :</h4>
+                <ul>
+                    <li>Clonez le repo git</li>
+                    <li>Lancez une compilation avec maven (pour résoudre les dépendances)</li>
+                </ul>
+                <div class="solution">
+                    {% highlight bash %}
+                    $ git clone https://github.com/xebia-france/atelier-couchbase.git
+                    $ cd atelier-couchbase
+                    $ mvn clean compile
+                    {% endhighlight %}
+                </div>
                 <p>
                 Vous pouvez passer au paragraphe suivant pendant le téléchargement des dépendances.
                 </p>
 
                 <h2>Installation de Couchbase</h2>
                 <p>
-                Robert a mis à votre disposition une instance Amazon EC2 medium (1 CPU Xeon E5-2670, 3.75GO RAM, Disque dur SSD 4GO) tournant sous Redhat Enterprise Linux 6.5. Vous vous connectez à la première instance, téléchargez la version <a href="http://packages.couchbase.com/releases/2.5.1/couchbase-server-enterprise_2.5.1_x86_64.rpm">2.5.1 de couchbase</a>, puis l'installez : 
+                Robert a mis à votre disposition une instance Amazon EC2 medium (1 CPU Xeon E5-2670, 3.75GO RAM, Disque dur SSD 4GO) tournant sous Redhat Enterprise Linux 6.5. Vous vous connectez à la première instance, téléchargez la version <a href="http://packages.couchbase.com/releases/3.0.0/couchbase-server-enterprise-3.0.0-centos6.x86_64.rpm">3.0.0 de couchbase</a>, puis l'installez : 
                 </p>
-                <p>
-                Votre instance est disponible à l'adresse suivante : {{page.group}}-couchbase-workshop.aws.xebiatechevent.info.<br/>
-
-                La clef privée est disponible dans le repo git. Pensez à adapter les permissions.
-                </p>
-
-{% highlight bash %}
-$ chmod 600 key/couchbase-xke.pem
-$ ssh -i key/couchbase-xke.pem ec2-user@{{page.group}}-couchbase-workshop.aws.xebiatechevent.info
-$ wget http://packages.couchbase.com/releases/2.5.1/couchbase-server-enterprise_2.5.1_x86_64.rpm
-$ sudo rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
-{% endhighlight %}
+                <h4>Votre mission :</h4>
+                <ul>
+                    <li>Téléchargez la clé disponible dans le repo git</li>
+                    <li>Connectez-vous en SSH à l'adresse {{page.group}}-couchbase-workshop.aws.xebiatechevent.info</li>
+                    <li>Téléchargez et installez Couchbase Server 3.0, avec rpm -i</li>
+                </ul>
+                <div class="solution">
+                    {% highlight bash %}
+                    $ chmod 600 key/couchbase-xke.pem
+                    $ ssh -i key/couchbase-xke.pem ec2-user@{{page.group}}-couchbase-workshop.aws.xebiatechevent.info
+                    $ wget http://packages.couchbase.com/releases/2.5.1/couchbase-server-enterprise_2.5.1_x86_64.rpm
+                    $ sudo rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
+                    {% endhighlight %}
+                </div>
 
                 <h2>Démarrage et configuration</h2>
                 <p>Vous pouvez maintenant démarrer couchbase-server et vous connecter à la console web depuis votre machine de développement (<a href="http://{{page.group}}-couchbase-workshop.aws.xebiatechevent.info:8091">http://{{page.group}}-couchbase-workshop.aws.xebiatechevent.info:8091</a>). Vous configurez votre serveur de la manière suivante :</p>
                 <ul>
-                    <li>Hotname: {{page.group}}-couchbase-workshop.aws.xebiatechevent.info</li>
+                    <li>Hostname: {{page.group}}-couchbase-workshop.aws.xebiatechevent.info</li>
                     <li>Per Server RAM Quota: 2000</li>
                 </ul>
-                <p>Inutile de créer les jeux de données présentés, vous avez les vôtres (même si vous ne le savez pas encore)
+                <p>Inutile de créer les samples proposés, nous allons créer les nôtres plus tard dans cet atelier.
 
                 <p>Vous créez le bucket default en changeant la configuration suivante : </p>
 
                 <ul>
-                    <li>100MO de mémoire allouée par noeud (minimum)</li>
+                    <li>100MO de mémoire allouée par noeud (100MO = minimum requis par couchbase pour un bucket)</li>
                     <li>Disable replicas</li>
                 </ul>
                 <p>Dans la page de notifications, la seule étape nécessaire est d'accepter les termes et conditions. Vous pouvez donc aussi décocher la case au début de la page.</p>
@@ -101,48 +107,55 @@ $ sudo rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                 Ajoutez votre premier document depuis la console web. Un document ayant pour id "hello_couchbase" et pour contenu "hello":"world".
                 </p>
                 <p>
-                Vous vous placez maintenant dans votre IDE préféré, à la racine du projet que vous venez de télécharger, et implémentez votre premier client qui vous permettra d'accéder au document que vous venez de créer depuis l'interface. Pour vous aider dans votre tâche, vous trouverez des commentaires de la forme de "//TODO Exercice n".
+                Vous vous placez maintenant dans votre IDE préféré, à la racine du projet que vous venez de télécharger, et implémentez votre premier client qui vous permettra d'accéder au document que vous venez de créer depuis l'interface. Pour vous aider dans votre tâche, vous trouverez des commentaires de la forme de "<strong>//TODO Exercice n</strong>" là où vous écrirez votre implémentation, et des "<strong>//Exercice n</strong>" au niveau des tests.
                 </p>
 
                 <p>
-                Si le test passe au vert, continuer à l'étape 2.
+                La documentation dont vous aurez besoin : <a href="http://docs.couchbase.com/developer/java-2.0/hello-couchbase.html">http://docs.couchbase.com/developer/java-2.0/hello-couchbase.html</a>
                 </p>
-                
-                <p class="solution">
-                    Aide : <a href="http://www.couchbase.com/autodocs/couchbase-java-client-1.4.4/com/couchbase/client/CouchbaseClient.html">API du client couchbase</a>
-                </p>
+                <h4>Votre mission :</h4>
+                <ul>
+                    <li>Faire passer le test <strong>HelloWorldTest.should_get_hello_world_document()</strong></li>
+                </ul>
 
                 <h2>Exercice 2 : Création d'un bucket pour l'application</h2>
-                <p>Pour l'instant, l'application ne possède pas de bucket dédié. Vous créez maintenant le bucket "publicotaurus" en modifiant les configurations suivantes dans l'interface de couchbase:</p>
+                <p>Pour l'instant, l'application ne possède pas de bucket dédié. Vous créez maintenant le bucket "publicotaurus".
+
+                <h4>Votre mission :</h4>
                 <ul>
-                    <li>1500MO de mémoire allouée par noeud</li>
-                    <li>Enable flush (pour permettre de vider le bucket au besoin)</li>
+                    <li>Créez un bucket "<strong>publicotaurus</strong>" avec les configurations suivantes :</li>
+                    <ul>
+                        <li>1500MO de mémoire allouée par noeud</li>
+                        <li>Enable flush (pour permettre de vider le bucket au besoin)</li>
+                    </ul>
                 </ul>
-                
-                <h2>Exercice 3 : Insertion du profil utilisateur</h2>
-                <p>L'application que vous récupérez dispose de profils utilisateur. Le test suivant définit un utilisateur que vous devrez insérer en base grâce à l'API couchbase (UserRepositoryTest). Pour rappel, couchbase stocke
-                les objets au format JSON. vous pouvez utiliser l'api Gson (ou autre) pour le sérialiser.
-                </p>
-                
+
+                <h2>Exercice 3 : Insertion d'un profil utilisateur</h2>
+                <p>L'application que vous récupérez dispose de profils utilisateur. Faites fonctionner l'insertion d'un utilisateur en vous aidant de la <a href="">documentation</a></p>
+                <h4>Votre mission :</h4>
+                <ul>
+                    <li>Faites passer le test <strong>UserRepositoryTest.should_insert_user_and_retrieve_an_user_in_database()</strong></li>
+                </ul>
+
                 <h2>Exercice 4 : Modifications concurrentes</h2>
                 <p>Lorsque deux utilisateurs modifient le même document en même temps, c'est en général celui qui le "commit" le dernier qui voir sa version sauvegardé. Comme un célèbre framework de persistence,
                 Couchbase possède un mécanisme interner pour gérer cette problématique à l'aide de lock optimiste.</p>
                 <p class="solution">
-                    Aide : Vous pouvez regarder la méthode appelée <a href = "http://docs.couchbase.com/couchbase-devguide-2.5/#cb-cas">"check and set"</a>.
+                Aide : Vous pouvez regarder la méthode appelée <a href = "http://docs.couchbase.com/couchbase-devguide-2.5/#cb-cas">"check and set"</a>.
                 </p>
-                
+
                 <h2>Exercice 5 : Apprendre à compter</h2>
                 <p>Vous souhaitez compter le nombre de fois qu'un utilisateur requête son profil. Mais cette fois, c'est une donnée qui va souvent évoluer et le verrou n'est pas la solution satisfaisante. Par chance, couchbase supporte les opérations atomiques. (un peu comme les séquences oracle ou postgre)</p>
                 <p>A travers la console web Couchbase, créez le document "user_document_retrieval_count" contenant la valeur 0. Puis, pour chaque appel à la méthode findUser, incrémenter votre compteur de 1</p>
 
                 <p class="solution">
-                    Aide : Vous pouvez regarder les méthodes incr et decr du client couchbase</a>.
+                Aide : Vous pouvez regarder les méthodes incr et decr du client couchbase</a>.
                 </p>
 
 
                 <h2>Exercice 6 : Insertion massive</h2>
                 <p>Maintenant que votre application roxx, vous souhaitez ajouter les 1 000 clients privilégiés qui utiliseront l'application les premiers.
-                    Lancer le test "should_insert_and_compare_bulk_of_users" pour lancer l'import des utilisateurs.
+                Lancer le test "should_insert_and_compare_bulk_of_users" pour lancer l'import des utilisateurs.
                 </p>
 
                 <h2>Exercice 7 : Créez vos premières vue</h2>
@@ -156,7 +169,7 @@ $ sudo rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                     <li>la ville (cityName);</li> 
                     <li>si ce dernier est actif ou non (active);</li>
                 </ul>
-                
+
                 Vous appellerez votre vue <strong>user</strong>. Vous devrez tout d'abord créer une vue en mode développement afin de tester votre vue.
                 </p>
                 <p>Pour décrire une vue, on utilise le paradigme de map/reduce. Map est la fonction telle que select en sql. Reduce est une fonction d'aggrégation, comme un count. Ces deux fonctions s'écrivent en javascript.</p>
@@ -164,20 +177,20 @@ $ sudo rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                 <p>Maintenant que votre vue vous paraît satisfaisante, nous allons créer deux autres vues dans le même design document (un design document et un regroupement de vues, promues en mode "production" au même moment).</p>
                 <p>Nos deux autres vues seront <strong>active_user</strong> et <strong>inactive_user</strong> et auront pour rôles de faire ce que leurs noms indiquent.</p>
                 <p>Une fois l'édition de vos vues terminées et testées, vous pouvez "publier" votre vue.</p>
-                
+
                 <p class = "solution">
-                    <a href = "http://docs.couchbase.com/couchbase-manual-2.0/#writing-views">documentation des vues</a>
+                <a href = "http://docs.couchbase.com/couchbase-manual-2.0/#writing-views">documentation des vues</a>
                 </p>
-                
+
                 <h2>Exercice 8 : Modifiez un design document</h2>
                 <p>Vous souhaitez maintenant ajouter une vue <strong>number_of_inactive_users</strong> pour compter le nombre d'utilisateurs inactifs. Pour cela, vous devez copier le design document en mode développement.</p>
                 <p class="solution">
-                    Pour cela, vous pouvez émettre un document vide et utiliser la fonction prédéfinie _count dans la partie reduce
+                Pour cela, vous pouvez émettre un document vide et utiliser la fonction prédéfinie _count dans la partie reduce
                 </p>
 
                 <h2>Exercice 9 : Les vues dans l'application</h2>
                 <p>Retournez dans la partie java, et à l'aide du client couchbase, récupérer les informations de la vue <em>inactive_user</em>.</p>
-                
+
                 <h2>Exercice 10 : Pagination</h2>
                 <p>Nos chers modérateurs souhaitent n'avoir que 100 résultats par page.</p>
                 <h2>Clustering</h2>
