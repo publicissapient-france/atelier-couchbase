@@ -10,11 +10,13 @@ public class Configuration {
     //TODO change this url to run it on your EC2 instance
     public static final String COUCHBASE_SERVER_ADDRESS = "127.0.0.1";
     public static final CouchbaseEnvironment COUCHBASE_ENVIRONMENT = getCouchbaseEnvironment();
+
+    public static final String DEFAULT_BUCKET_NAME = "default";
+    private static Bucket DEFAULT_BUCKET = null;
+
     public static final String PUBLICOTAURUS_BUCKET_NAME = "publicotaurus";
     private static Bucket PUBLICOTAURUS_BUCKET = null;
     public static CouchbaseCluster couchbaseCluster = CouchbaseCluster.create(COUCHBASE_ENVIRONMENT, COUCHBASE_SERVER_ADDRESS);
-    public static final String DEFAULT_BUCKET_NAME = "default";
-    private static Bucket DEFAULT_BUCKET = null;
 
     private static DefaultCouchbaseEnvironment getCouchbaseEnvironment() {
         return DefaultCouchbaseEnvironment.builder().connectTimeout(10_000).disconnectTimeout(10_000).kvTimeout(10_000)
@@ -33,6 +35,13 @@ public class Configuration {
         return getBucketOfName(DEFAULT_BUCKET, DEFAULT_BUCKET_NAME);
     }
 
+    /**
+     * Get or init the connection with a bucket
+     * @param bucket the bucket var to check if it is already initiated
+     * @param bucketName the bucket name, to be able to initiate the connection
+     * @return bucket
+     */
+    //TODO Exercise 1 : should return the PUBLICOTAURUS_BUCKET constant and init it if needed
     public static Bucket getBucketOfName(Bucket bucket, String bucketName) {
         if (bucket == null) {
             bucket = couchbaseCluster.openBucket(bucketName);
