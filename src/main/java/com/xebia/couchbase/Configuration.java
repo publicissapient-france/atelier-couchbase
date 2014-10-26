@@ -7,7 +7,8 @@ import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
 
 public class Configuration {
 
-    //TODO change this url to run it on your EC2 instance
+    //TODO Exercise 1.1
+    // Change this url to run it on your EC2 instance
     public static final String COUCHBASE_SERVER_ADDRESS = "127.0.0.1";
     public static final CouchbaseEnvironment COUCHBASE_ENVIRONMENT = getCouchbaseEnvironment();
 
@@ -27,7 +28,9 @@ public class Configuration {
         return getBucketOfName(PUBLICOTAURUS_BUCKET, PUBLICOTAURUS_BUCKET_NAME);
     }
 
+    //TODO Exercise 1.2
     public static void reinitConnection() {
+        // Create the connection to the cluster using CouchbaseCluster.create() method.
         couchbaseCluster = CouchbaseCluster.create(COUCHBASE_ENVIRONMENT, COUCHBASE_SERVER_ADDRESS);
     }
 
@@ -41,8 +44,9 @@ public class Configuration {
      * @param bucketName the bucket name, to be able to initiate the connection
      * @return bucket
      */
-    //TODO Exercise 1 : should return the PUBLICOTAURUS_BUCKET constant and init it if needed
+    //TODO Exercise 1.3
     public static Bucket getBucketOfName(Bucket bucket, String bucketName) {
+        // Should return the PUBLICOTAURUS_BUCKET constant and init it if needed
         if (bucket == null) {
             bucket = couchbaseCluster.openBucket(bucketName);
         }
