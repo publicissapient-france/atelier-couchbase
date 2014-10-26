@@ -138,15 +138,32 @@
                 </ul>
 
                 <h2>Exercice 4 : Modifications concurrentes</h2>
-                <p>Lorsque deux utilisateurs modifient le même document en même temps, c'est en général celui qui le "commit" le dernier qui voir sa version sauvegardé. Comme un célèbre framework de persistence,
-                Couchbase possède un mécanisme interner pour gérer cette problématique à l'aide de lock optimiste.</p>
+                <h3>Exercice 4a : Verrou optimiste</h3>
+                <p>Vous souhaitez maintenant pouvoir updater un profil utilisateur, en toute sécurité.
+                </p>
+                <h4>Votre mission :</h4>
+                <ul>
+                    <li>Faites passer le test <strong>UserRepositoryTest.should_update_with_an_optimistic_lock</strong></li>
+                </ul>
+
                 <p class="solution">
-                Aide : Vous pouvez regarder la méthode appelée <a href = "http://docs.couchbase.com/couchbase-devguide-2.5/#cb-cas">"check and set"</a>.
+                Vous pouvez utiliser la méthode <strong>Bucket.replace()</strong>                
+                </p>
+                <p>
+                Le test que vous avez fait passer met en avant le fait que, par sécurité, couchbase ne vous autorise à remplacer un document que si vous aviez bien la dernière version de celui-ci.
+                </p>
+                <h3>Exercice 4b : Verrou pessimiste</h3>
+                <p>Vous souhaitez cette fois carrément bloquer le document en lecture à partir du moment où vous-même le lisez.</p>
+                <h4>Votre mission :</h4>
+                <ul>
+                    <li>Faites passer le test <strong>UserRepositoryTest.should_not_allow_read_during_edition</strong></li>
+                </ul>
+                <p class="solution">
+                Vous pouvez utiliser la méthode <strong>Bucket.getAndLock()</strong>                
                 </p>
 
                 <h2>Exercice 5 : Apprendre à compter</h2>
                 <p>Vous souhaitez compter le nombre de fois qu'un utilisateur requête son profil. Mais cette fois, c'est une donnée qui va souvent évoluer et le verrou n'est pas la solution satisfaisante. Par chance, couchbase supporte les opérations atomiques. (un peu comme les séquences oracle ou postgre)</p>
-                <p>A travers la console web Couchbase, créez le document "user_document_retrieval_count" contenant la valeur 0. Puis, pour chaque appel à la méthode findUser, incrémenter votre compteur de 1</p>
 
                 <p class="solution">
                 Aide : Vous pouvez regarder les méthodes incr et decr du client couchbase</a>.
