@@ -24,13 +24,16 @@ public class UserRepository {
         counterRepository = new CounterRepository();
     }
 
+    //TODO Exercise 3.2
     public void insertUser(User user) throws Exception {
+        // get the user JsonDocument thanks to the userToDocument() method.
         final JsonDocument userJsonDocument = userToDocument(user);
 
         try {
+            //Insert the document thanks to the Configuration.publicotaurusBucket()
             Configuration.publicotaurusBucket().insert(userJsonDocument);
         } catch (CASMismatchException e) {
-            //Test should be ok if document has already been inserted
+            //Test should be ok if document has already been inserted, so nothing to do here
         }
     }
 
@@ -72,7 +75,10 @@ public class UserRepository {
         return String.format("%s%s_%s", USER_DOCUMENT_PREFIX, firstName.toLowerCase(), lastName.toLowerCase());
     }
 
+    //TODO Exercise 3.1
     private JsonDocument userToDocument(User user) {
+        // Transform user to document thanks to a Gson object and a JsonTranscoder object
+        // (both available in this class)
         final JsonObject userJsonObject;
         try {
             userJsonObject = jsonTranscoder.stringToJsonObject(gson.toJson(user));
