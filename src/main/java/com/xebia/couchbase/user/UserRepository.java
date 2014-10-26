@@ -37,10 +37,12 @@ public class UserRepository {
         }
     }
 
+    //TODO Exercise 4a
     public void updateUser(JsonDocument user) {
         Configuration.publicotaurusBucket().replace(user);
     }
 
+    //TODO Exercise 4b
     public JsonDocument getAndLock(String firstName, String lastName) {
         return Configuration.publicotaurusBucket().getAndLock(computeUserId(firstName, lastName), 5);
     }

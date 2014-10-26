@@ -32,6 +32,7 @@ public class UserRepositoryTest {
     }
 
     @Test
+    //Exercise 3
     public void should_insert_user_and_retrieve_an_user_in_database() throws Exception {
         final User user = anUser().withUserProfile(
                 anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
@@ -51,6 +52,7 @@ public class UserRepositoryTest {
     }
 
     @Test
+    //Exercise 4a
     public void should_update_with_an_optimistic_lock() throws Exception {
         final JsonDocument user1 = userRepository.findUser("Antoine", "Michaud");
         final JsonDocument user2 = userRepository.findUser("Antoine", "Michaud");
@@ -67,6 +69,14 @@ public class UserRepositoryTest {
     }
 
     @Test
+    //Exercise 4b
+    public void should_not_allow_read_during_edition() throws Exception {
+        assertThat(userRepository.getAndLock("Antoine", "Michaud")).isNotNull();
+        assertThat(userRepository.getAndLock("Antoine", "Michaud")).isNull();
+    }
+
+    @Test
+    //Exercise 5
     public void should_count_number_of_document_retrieval() throws Exception {
         // Given
 
@@ -85,12 +95,6 @@ public class UserRepositoryTest {
                 .get("user_document_retrieval_count", StringDocument.class)
                 .content());
         assertThat(eventualUserDocumentRetrievalCount).isEqualTo(userDocumentRetrievalCount + 1);
-    }
-
-    @Test
-    public void should_not_allow_read_during_edition() throws Exception {
-        assertThat(userRepository.getAndLock("Antoine", "Michaud")).isNotNull();
-        assertThat(userRepository.getAndLock("Antoine", "Michaud")).isNull();
     }
 
     @Test
