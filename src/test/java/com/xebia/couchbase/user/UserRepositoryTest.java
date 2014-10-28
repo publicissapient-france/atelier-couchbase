@@ -16,6 +16,7 @@ import java.util.List;
 
 import static com.xebia.couchbase.Configuration.publicotaurusBucket;
 import static com.xebia.couchbase.location.AddressBuilder.anAddress;
+import static com.xebia.couchbase.user.CounterRepository.USER_DOCUMENT_RETRIEVAL_COUNT_ID;
 import static com.xebia.couchbase.user.UserBuilder.anUser;
 import static com.xebia.couchbase.user.UserProfileBuilder.anUserProfile;
 import static java.lang.Long.parseLong;
@@ -61,12 +62,7 @@ public class UserRepositoryTest {
     //Exercise 4a
     public void should_update_with_an_optimistic_lock() throws Exception {
         // Given
-        final User user = anUser().withUserProfile(
-                anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
-                        .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
-                                .build()).build()).build();
-
-        userRepository.insertUser(user);
+        givenAnExistingUser();
 
         final JsonDocument user1 = userRepository.findUser("Antoine", "Michaud");
         final JsonDocument user2 = userRepository.findUser("Antoine", "Michaud");
@@ -91,12 +87,7 @@ public class UserRepositoryTest {
     //Exercise 4b
     public void should_not_allow_read_during_edition() {
         // Given
-        final User user = anUser().withUserProfile(
-                anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
-                        .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
-                                .build()).build()).build();
-
-        userRepository.insertUser(user);
+        givenAnExistingUser();
         final JsonDocument firstGetAndLock = userRepository.getAndLock("Antoine", "Michaud");
 
         // When
@@ -109,24 +100,22 @@ public class UserRepositoryTest {
 
     @Test
     //Exercise 5
-    public void should_count_number_of_document_retrieval() throws Exception {
+    public void should_count_number_of_document_retrieval() {
         // Given
-
-        final StringDocument userDocumentRetrievalCountDocument = publicotaurusBucket()
-                .get("user_document_retrieval_count", StringDocument.class);
-
-        Long userDocumentRetrievalCount = userDocumentRetrievalCountDocument != null
-                ? parseLong(userDocumentRetrievalCountDocument.content())
-                : -1L;
+        givenAnExistingUser();
+        givenACounter(USER_DOCUMENT_RETRIEVAL_COUNT_ID);
+        int tryCount = 42;
 
         // When
-        userRepository.findUser("Antoine", "Michaud");
+        for (int i = 0; i < tryCount; i++) {
+            userRepository.findUser("Antoine", "Michaud");
+        }
 
         // Then
         final Long eventualUserDocumentRetrievalCount = parseLong(publicotaurusBucket()
-                .get("user_document_retrieval_count", StringDocument.class)
+                .get(USER_DOCUMENT_RETRIEVAL_COUNT_ID, StringDocument.class)
                 .content());
-        assertThat(eventualUserDocumentRetrievalCount).isEqualTo(userDocumentRetrievalCount + 1);
+        assertThat(eventualUserDocumentRetrievalCount).isEqualTo(tryCount);
     }
 
     @Test
@@ -134,6 +123,19 @@ public class UserRepositoryTest {
     public void should_insert_a_bulk_of_users() throws Exception {
         final List<User> users = UserReaderFromCsv.getUsersFrom("users.csv");
         userRepository.insertBulkOfUsers(users);
+    }
+
+    private void givenAnExistingUser() {
+        final User user = anUser().withUserProfile(
+                anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
+                        .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
+                                .build()).build()).build();
+
+        userRepository.insertUser(user);
+    }
+
+    private void givenACounter(String userDocumentRetrievalCountId) {
+        publicotaurusBucket().counter(userDocumentRetrievalCountId, 1, 0);
     }
 
     private User fromDocumentToUser(JsonDocument userJsonDocument) throws IOException {
