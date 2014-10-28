@@ -10,24 +10,44 @@ import com.xebia.couchbase.Configuration;
 import com.xebia.couchbase.user.UserRepository;
 
 public class UserView {
+
     //TODO Exercise 10.1 : Store two attributes in order to iterates on result pages
+    private int startIndex;
+    private final int documentsByPage;
+
+    private UserView(int startIndex, int documentsByPage) {
+        this.startIndex = startIndex;
+        this.documentsByPage = documentsByPage;
+    }
 
     //TODO Exercise 9
     public static ViewResult getInactiveUsers() {
-        return null;
+        return Configuration.publicotaurusBucket().query(ViewQuery.from("moderator", "inactive_user").stale(Stale.FALSE));
+    }
+
+    public static UserView getPaginatedActiveUsers(int documentsByPage) {
+        return new UserView(0, documentsByPage);
     }
 
     //TODO Exercise 10.2
-    public static UserView getPaginatedActiveUsers(int documentsByPage) {
-        return null;
-    }
-
-    //TODO Exercise 10.3
     public Iterable<ViewRow> nextPage() {
-        return null;
+        int currentIndex = startIndex++;
+        return Configuration.publicotaurusBucket()
+                .query(ViewQuery
+                        .from("moderator", "active_user")
+                        .skip(currentIndex * documentsByPage)
+                        .stale(Stale.FALSE)
+                        .limit(documentsByPage)).allRows();
     }
 
     //TODO Exercise 11
     public static void disableUser(String lastName) {
+        final ViewResult phoenixKlineSingletonBefore = Configuration.publicotaurusBucket().query(
+                ViewQuery.from("moderator", "user").key(lastName));
+
+        final JsonDocument phoenixKline = Iterables.getFirst(phoenixKlineSingletonBefore.allRows(), null).document();
+        phoenixKline.content().put("active", false);
+        final UserRepository userRepository = new UserRepository();
+        userRepository.updateUser(phoenixKline);
     }
 }

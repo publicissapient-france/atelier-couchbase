@@ -25,34 +25,69 @@ public class UserRepository {
 
     //TODO Exercise 3.2
     public void insertUser(User user) {
+        // get the user JsonDocument thanks to the userToDocument() method.
+        final JsonDocument userJsonDocument = userToDocument(user);
+
+        try {
+            //Insert the document thanks to the Configuration.publicotaurusBucket()
+            Configuration.publicotaurusBucket().insert(userJsonDocument);
+        } catch (CASMismatchException e) {
+            //Test should be ok if document has already been inserted, so nothing to do here
+        }
     }
     //TODO Exercise 3.3
-    //TODO Exercise 5.2
     public JsonDocument findUser(String firstName, String lastName) {
-        return null;
+        //TODO Exercise 5.2
+        counterRepository.incrementUserDocumentRetrieval();
+        return Configuration.publicotaurusBucket().get(computeUserId(firstName, lastName));
     }
 
     //TODO Exercise 4a
     public void updateUser(JsonDocument user) {
+        Configuration.publicotaurusBucket().replace(user);
     }
 
     //TODO Exercise 4b
     public JsonDocument getAndLock(String firstName, String lastName) {
-        return null;
+        return Configuration.publicotaurusBucket().getAndLock(computeUserId(firstName, lastName), 5);
     }
 
     //TODO Exercise 6.2
     public void insertBulkOfUsers(List<User> users) {
+        for (User user : users) {
+            try {
+                upsertUser(user);
+            } catch (Exception e) {
+                System.out.println("Client planté. Réinitialisation de la connexion à la base.");
+                reinitConnection();
+                // Reprise du document planté après réinitialisation de la connexion
+                upsertUser(user);
+            }
+        }
     }
 
     //TODO Exercise 6.1
     private void upsertUser(User user) {
+        Configuration.publicotaurusBucket().upsert(userToDocument(user));
     }
 
     //TODO Exercise 3.1
     private JsonDocument userToDocument(User user) {
         // Transform user to document thanks to a Gson object and a JsonTranscoder object
         // (both available in this class)
-        return null;
+        final JsonObject userJsonObject;
+        try {
+            userJsonObject = jsonTranscoder.stringToJsonObject(gson.toJson(user));
+            final UserProfile userProfile = user.getUserProfile();
+            final String userDocumentId = computeUserId(userProfile.getFirstName(), userProfile.getLastName());
+            return JsonDocument.create(userDocumentId, userJsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String computeUserId(String firstName, String lastName) {
+        return String.format("%s%s_%s", USER_DOCUMENT_PREFIX, firstName.toLowerCase(), lastName.toLowerCase());
     }
 }

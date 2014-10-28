@@ -8,6 +8,7 @@ public class CounterRepository {
 
     //TODO Exercice 5.1
     public void incrementUserDocumentRetrieval() {
+        publicotaurusBucket().counter(USER_DOCUMENT_RETRIEVAL_COUNT_ID, 1, 0);
     }
 
 }
