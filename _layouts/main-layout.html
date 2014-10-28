@@ -48,11 +48,11 @@
                     <li>Lancez une compilation avec maven (pour résoudre les dépendances)</li>
                 </ul>
                 <div class="solution">
-                    {% highlight bash %}
-                    $ git clone https://github.com/xebia-france/atelier-couchbase.git
-                    $ cd atelier-couchbase
-                    $ mvn clean compile
-                    {% endhighlight %}
+{% highlight bash %}
+$ git clone https://github.com/xebia-france/atelier-couchbase.git
+$ cd atelier-couchbase
+$ mvn clean compile
+{% endhighlight %}
                 </div>
                 <p>
                 Vous pouvez passer au paragraphe suivant pendant le téléchargement des dépendances.
@@ -69,12 +69,12 @@
                     <li>Téléchargez et installez Couchbase Server 3.0, avec rpm -i</li>
                 </ul>
                 <div class="solution">
-                    {% highlight bash %}
-                    $ chmod 600 key/couchbase-xke.pem
-                    $ ssh -i key/couchbase-xke.pem ec2-user@{{page.group}}-couchbase-workshop.aws.xebiatechevent.info
-                    $ wget http://packages.couchbase.com/releases/2.5.1/couchbase-server-enterprise_2.5.1_x86_64.rpm
-                    $ sudo rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
-                    {% endhighlight %}
+{% highlight bash %}
+$ chmod 600 key/couchbase-xke.pem
+$ ssh -i key/couchbase-xke.pem ec2-user@{{page.group}}-couchbase-workshop.aws.xebiatechevent.info
+$ wget http://packages.couchbase.com/releases/2.5.1/couchbase-server-enterprise_2.5.1_x86_64.rpm
+$ sudo rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
+{% endhighlight %}
                 </div>
 
                 <h2>Démarrage et configuration</h2>
@@ -214,17 +214,26 @@
                 <h2>Exercice 9 : Les vues dans l'application</h2>
                 <p>Retournez dans la partie java, et à l'aide du client couchbase, récupérer les informations de la vue <em>inactive_user</em>.</p>
 
+                <h4>Petites aides dont vous aurez besoin :</h4>
+                <p><ul>
+                    <li><a href="http://docs.couchbase.com/developer/java-2.0/querying-views.html">Par ici</a> pour la doc. Attention, il se peut que des différences mineures avec l'API que vous utiliserez se soient glissées dans la doc de couchbase qui n'est pas complètement à jour.</li>
+                    <li>Dans les ViewQuery vous sera proposé de préciser le <strong>stale</strong> qui vous intéressera sûrement. Vous trouverez des informations sur ce point dans <a href="http://docs.couchbase.com/admin/admin/Views/views-index-updates.html">cette page</a> de la doc.</li>
+                </p>
+
                 <h2>Exercice 10 : Pagination</h2>
                 <p>Nos chers modérateurs souhaitent n'avoir que 100 résultats par page.</p>
+
+                <h2>Exercice 11 : Modération</h2>
+                <p>Nos chers modérateurs souhaitent pouvoir désactiver un utilisateurs facielement depuis les vues qui leur appartiennent.
                 <h2>Clustering</h2>
                 <p>
-                Ca y est, vous avez commencé à énerver les gens et tout le monde pense que vous bluffez. C'est trop beau pour être vrai. Et d'abord, ça ne peut pas être aussi facile de créer un cluster et de gérer sa réplication !
+                Et si on scalait maintenant ? Essayez de joindre votre noeud à celui de votre voisin pour en former un !
                 </p>
                 <p>
-                Vous installez donc couchbase-server sur la deuxième machine mise à votre disposition. Affichez la console d'administration de votre nouveau serveur et joignez le à l'ancien. Lancez un rebalancing et observez l'activité de vos noeuds à travers vos graphes.
+                Une fois le noeud ajouté, lancez un rebalancing et observez l'activité de vos noeuds à travers vos graphes.
                 </p>
                 <h2>XDCR</h2>
-                <p>Faites nous signe quand vous êtes arrivé ici :-)</p>
+                <p>Idem qu'au dessus, à l'échelle suivante.</p>
                 <h3>
                     <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Auteurs et contributeurs</h3>
 
