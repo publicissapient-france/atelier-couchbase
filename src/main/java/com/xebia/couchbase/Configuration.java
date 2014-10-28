@@ -17,11 +17,16 @@ public class Configuration {
 
     public static final String PUBLICOTAURUS_BUCKET_NAME = "publicotaurus";
     private static Bucket PUBLICOTAURUS_BUCKET = null;
-    private static CouchbaseCluster couchbaseCluster = CouchbaseCluster.create(COUCHBASE_ENVIRONMENT, COUCHBASE_SERVER_ADDRESS);
+    public static CouchbaseCluster couchbaseCluster =
+            CouchbaseCluster.create(COUCHBASE_ENVIRONMENT, COUCHBASE_SERVER_ADDRESS);
 
     private static DefaultCouchbaseEnvironment getCouchbaseEnvironment() {
-        return DefaultCouchbaseEnvironment.builder().connectTimeout(10_000).disconnectTimeout(10_000).kvTimeout(10_000)
-                .managementTimeout(10_000).queryTimeout(10_000).build();
+        return DefaultCouchbaseEnvironment.builder()
+                .connectTimeout(10_000)
+                .disconnectTimeout(10_000)
+                .kvTimeout(10_000)
+                .managementTimeout(10_000)
+                .queryTimeout(10_000).build();
     }
 
     public static Bucket publicotaurusBucket() {
@@ -40,7 +45,8 @@ public class Configuration {
 
     /**
      * Get or init the connection with a bucket
-     * @param bucket the bucket var to check if it is already initiated
+     *
+     * @param bucket     the bucket var to check if it is already initiated
      * @param bucketName the bucket name, to be able to initiate the connection
      * @return bucket
      */
