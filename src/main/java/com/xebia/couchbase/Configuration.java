@@ -31,7 +31,6 @@ public class Configuration {
     //TODO Exercise 1.2
     public static void reinitConnection() {
         // Create the connection to the cluster using CouchbaseCluster.create() method.
-        couchbaseCluster = CouchbaseCluster.create(COUCHBASE_ENVIRONMENT, COUCHBASE_SERVER_ADDRESS);
     }
 
     public static Bucket defaultBucket() {
@@ -47,10 +46,6 @@ public class Configuration {
     //TODO Exercise 1.3
     private static Bucket getBucketOfName(Bucket bucket, String bucketName) {
         // Should return the PUBLICOTAURUS_BUCKET constant and init it if needed
-        if (bucket == null) {
-            bucket = couchbaseCluster.openBucket(bucketName);
-        }
-
         return bucket;
     }
 
