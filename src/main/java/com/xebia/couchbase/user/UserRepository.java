@@ -71,10 +71,6 @@ public class UserRepository {
         Configuration.publicotaurusBucket().upsert(userToDocument(user));
     }
 
-    private String computeUserId(String firstName, String lastName) {
-        return String.format("%s%s_%s", USER_DOCUMENT_PREFIX, firstName.toLowerCase(), lastName.toLowerCase());
-    }
-
     //TODO Exercise 3.1
     private JsonDocument userToDocument(User user) {
         // Transform user to document thanks to a Gson object and a JsonTranscoder object
@@ -89,5 +85,9 @@ public class UserRepository {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private String computeUserId(String firstName, String lastName) {
+        return String.format("%s%s_%s", USER_DOCUMENT_PREFIX, firstName.toLowerCase(), lastName.toLowerCase());
     }
 }
