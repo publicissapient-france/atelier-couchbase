@@ -13,9 +13,9 @@ public class UserView {
 
     //TODO Exercise 10.1 : Store two attributes in order to iterates on result pages
     private int startIndex;
-    private int documentsByPage;
+    private final int documentsByPage;
 
-    public UserView(int startIndex, int documentsByPage) {
+    private UserView(int startIndex, int documentsByPage) {
         this.startIndex = startIndex;
         this.documentsByPage = documentsByPage;
     }

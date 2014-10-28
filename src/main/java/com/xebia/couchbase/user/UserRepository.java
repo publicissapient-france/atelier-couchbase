@@ -12,7 +12,7 @@ import java.util.List;
 import static com.xebia.couchbase.Configuration.reinitConnection;
 
 public class UserRepository {
-    public static final String USER_DOCUMENT_PREFIX = "user::";
+    private static final String USER_DOCUMENT_PREFIX = "user::";
     private final Gson gson;
     private final JsonTranscoder jsonTranscoder;
     private final CounterRepository counterRepository;
@@ -24,7 +24,7 @@ public class UserRepository {
     }
 
     //TODO Exercise 3.2
-    public void insertUser(User user) throws Exception {
+    public void insertUser(User user) {
         // get the user JsonDocument thanks to the userToDocument() method.
         final JsonDocument userJsonDocument = userToDocument(user);
 
@@ -53,7 +53,7 @@ public class UserRepository {
     }
 
     //TODO Exercise 6.2
-    public void insertBulkOfUsers(List<User> users) throws Exception {
+    public void insertBulkOfUsers(List<User> users) {
         for (User user : users) {
             try {
                 upsertUser(user);

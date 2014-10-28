@@ -11,7 +11,7 @@ import java.util.Map;
 import static com.google.common.collect.Iterables.getFirst;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserViewRepositoryTest {
+public class UserViewTest {
 
     @Test
     //Exercise 9
