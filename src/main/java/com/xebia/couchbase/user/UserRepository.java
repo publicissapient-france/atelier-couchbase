@@ -2,16 +2,18 @@ package com.xebia.couchbase.user;
 
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
-import com.couchbase.client.java.error.CASMismatchException;
 import com.couchbase.client.java.transcoder.JsonTranscoder;
 import com.google.gson.Gson;
 import com.xebia.couchbase.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 import static com.xebia.couchbase.Configuration.reinitConnection;
 
 public class UserRepository {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserRepository.class);
     private static final String USER_DOCUMENT_PREFIX = "user::";
     private final Gson gson;
     private final JsonTranscoder jsonTranscoder;
@@ -28,13 +30,10 @@ public class UserRepository {
         // get the user JsonDocument thanks to the userToDocument() method.
         final JsonDocument userJsonDocument = userToDocument(user);
 
-        try {
-            //Insert the document thanks to the Configuration.publicotaurusBucket()
-            Configuration.publicotaurusBucket().insert(userJsonDocument);
-        } catch (CASMismatchException e) {
-            //Test should be ok if document has already been inserted, so nothing to do here
-        }
+        //Insert the document thanks to the Configuration.publicotaurusBucket()
+        Configuration.publicotaurusBucket().insert(userJsonDocument);
     }
+
     //TODO Exercise 3.3
     public JsonDocument findUser(String firstName, String lastName) {
         //TODO Exercise 5.2
@@ -58,7 +57,7 @@ public class UserRepository {
             try {
                 upsertUser(user);
             } catch (Exception e) {
-                System.out.println("Client planté. Réinitialisation de la connexion à la base.");
+                LOGGER.error("Client planté. Réinitialisation de la connexion à la base.");
                 reinitConnection();
                 // Reprise du document planté après réinitialisation de la connexion
                 upsertUser(user);
@@ -82,7 +81,7 @@ public class UserRepository {
             final String userDocumentId = computeUserId(userProfile.getFirstName(), userProfile.getLastName());
             return JsonDocument.create(userDocumentId, userJsonObject);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error during json transformation", e);
             return null;
         }
     }

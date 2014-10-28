@@ -3,11 +3,11 @@ package com.xebia.couchbase.user;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.StringDocument;
 import com.couchbase.client.java.error.CASMismatchException;
-import com.couchbase.client.java.error.DocumentAlreadyExistsException;
 import com.google.gson.Gson;
 import com.xebia.couchbase.batch.UserReaderFromCsv;
 import com.xebia.couchbase.location.City;
 import com.xebia.couchbase.location.Country;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -31,19 +31,24 @@ public class UserRepositoryTest {
         gson = new Gson();
     }
 
+    @Before
+    public void setUp() {
+        publicotaurusBucket().bucketManager().flush();
+    }
+
     @Test
     //Exercise 3
     public void should_insert_user_and_retrieve_an_user_in_database() throws Exception {
+        // Given
         final User user = anUser().withUserProfile(
                 anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
                         .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
                                 .build()).build()).build();
 
-        try {
-            userRepository.insertUser(user);
-        } catch (DocumentAlreadyExistsException e) {
-            // If the document already exists
-        }
+        // When
+        userRepository.insertUser(user);
+
+        // Then
         final JsonDocument resultDocument = userRepository.findUser("Antoine", "Michaud");
         final User resultUser = fromDocumentToUser(resultDocument);
         resultUser.getUserProfile().setSummary("Java Developer");
