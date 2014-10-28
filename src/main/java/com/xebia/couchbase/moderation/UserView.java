@@ -11,7 +11,7 @@ import com.xebia.couchbase.user.UserRepository;
 
 public class UserView {
 
-    //TODO Exercice 10.1 : Stocker un attribut permettant d'itérer sur les résultats
+    //TODO Exercise 10.1 : Store two attributes in order to iterates on result pages
     private int startIndex;
     private int documentsByPage;
 
@@ -20,7 +20,7 @@ public class UserView {
         this.documentsByPage = documentsByPage;
     }
 
-    //TODO Exercice 9.2 : Requêter les vues
+    //TODO Exercise 9
     public static ViewResult getInactiveUsers() {
         return Configuration.publicotaurusBucket().query(ViewQuery.from("moderator", "inactive_user").stale(Stale.FALSE));
     }
@@ -29,6 +29,7 @@ public class UserView {
         return new UserView(0, documentsByPage);
     }
 
+    //TODO Exercise 10.2
     public Iterable<ViewRow> nextPage() {
         int currentIndex = startIndex++;
         return Configuration.publicotaurusBucket()
@@ -39,6 +40,7 @@ public class UserView {
                         .limit(documentsByPage)).allRows();
     }
 
+    //TODO Exercise 11
     public static void disableUser(String lastName) {
         final ViewResult phoenixKlineSingletonBefore = Configuration.publicotaurusBucket().query(
                 ViewQuery.from("moderator", "user").key(lastName));

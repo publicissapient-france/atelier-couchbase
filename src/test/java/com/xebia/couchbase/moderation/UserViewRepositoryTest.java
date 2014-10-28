@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserViewRepositoryTest {
 
     @Test
+    //Exercise 9
     public void should_retrieve_user_from_moderator_point_of_view() throws Exception {
         // Given / When
         final ViewResult inactiveUsers = UserView.getInactiveUsers();
@@ -49,6 +50,7 @@ public class UserViewRepositoryTest {
     }
 
     @Test
+    //Exercise 11
     public void should_disable_an_user() throws Exception {
         final String userName = "KLINE";
 
