@@ -165,14 +165,20 @@
                 <h2>Exercice 5 : Apprendre à compter</h2>
                 <p>Vous souhaitez compter le nombre de fois qu'un utilisateur requête son profil. Mais cette fois, c'est une donnée qui va souvent évoluer et le verrou n'est pas la solution satisfaisante. Par chance, couchbase supporte les opérations atomiques. (un peu comme les séquences oracle ou postgre)</p>
 
-                <p class="solution">
-                Aide : Vous pouvez regarder les méthodes incr et decr du client couchbase</a>.
-                </p>
+                <h4>Votre mission :</h4>
+                <p>Utilisez la méthode <strong>counter()</strong> disponible sur votre bucket.</p>
+                <p>Vous pouvez rejouer le test pour incrémenter le compteur et aller observer le résultat sur la web console.</p>
 
 
                 <h2>Exercice 6 : Insertion massive</h2>
                 <p>Maintenant que votre application roxx, vous souhaitez ajouter les 1 000 clients privilégiés qui utiliseront l'application les premiers.
-                Lancer le test "should_insert_and_compare_bulk_of_users" pour lancer l'import des utilisateurs.
+
+                <h4>Votre mission :</h4>
+                <ul>
+                    <li>Implémentez la méthode <strong>upsertUser()</strong> destinée à insérer ou updater un document indifféremment de son existance en base ou non.</li>
+                    <li>Lancer le test "should_insert_and_compare_bulk_of_users" pour lancer l'import des utilisateurs.</li>
+                    <li>Vous obtenez une erreur. C'est un bug du sdk 2.0. Le workaround que nous vous proposons est de réinitialiser la connexion sur réception d'une exception dans la méthode <strong>insertBulkOfUsers()</strong></li>
+                </ul>
                 </p>
 
                 <h2>Exercice 7 : Créez vos premières vue</h2>
