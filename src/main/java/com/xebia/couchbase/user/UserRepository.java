@@ -15,6 +15,7 @@ import static com.xebia.couchbase.Configuration.reinitConnection;
 public class UserRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRepository.class);
     private static final String USER_DOCUMENT_PREFIX = "user::";
+    public static final int DEFAULT_LOCK_TIME = 5;
     private final Gson gson;
     private final JsonTranscoder jsonTranscoder;
     private final CounterRepository counterRepository;
@@ -42,13 +43,13 @@ public class UserRepository {
     }
 
     //TODO Exercise 4a
-    public void updateUser(JsonDocument user) {
-        Configuration.publicotaurusBucket().replace(user);
+    public JsonDocument updateUser(JsonDocument user) {
+        return Configuration.publicotaurusBucket().replace(user);
     }
 
     //TODO Exercise 4b
     public JsonDocument getAndLock(String firstName, String lastName) {
-        return Configuration.publicotaurusBucket().getAndLock(computeUserId(firstName, lastName), 5);
+        return Configuration.publicotaurusBucket().getAndLock(computeUserId(firstName, lastName), DEFAULT_LOCK_TIME);
     }
 
     //TODO Exercise 6.2

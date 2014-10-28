@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.xebia.couchbase.Configuration.publicotaurusBucket;
@@ -56,28 +57,54 @@ public class UserRepositoryTest {
         assertThat(resultDocument.id()).isEqualTo("user::antoine_michaud");
     }
 
-    @Test
+    @Test(expected = CASMismatchException.class)
     //Exercise 4a
     public void should_update_with_an_optimistic_lock() throws Exception {
+        // Given
+        final User user = anUser().withUserProfile(
+                anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
+                        .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
+                                .build()).build()).build();
+
+        userRepository.insertUser(user);
+
         final JsonDocument user1 = userRepository.findUser("Antoine", "Michaud");
         final JsonDocument user2 = userRepository.findUser("Antoine", "Michaud");
         user1.content().getObject("userProfile").put("summary", "Couchbase Developer");
         user2.content().getObject("userProfile").put("summary", "PHP Developer");
 
-        userRepository.updateUser(user1);
+        // When
+        JsonDocument updatedUser1 = null;
+        JsonDocument updatedUser2 = null;
         try {
-            userRepository.updateUser(user2);
-        } catch (CASMismatchException e) {
-            //CASMismatchException is actually expected here
+            updatedUser1 = userRepository.updateUser(user1);
+            updatedUser2 = userRepository.updateUser(user2);
+        } finally {
+            // Then
+            assertThat(updatedUser1).isNotNull();
+            assertThat(updatedUser2).isNull();
+            assertThat(updatedUser1.content().getObject("userProfile").get("summary")).isEqualTo("Couchbase Developer");
         }
-        assertThat(user1.content().getObject("userProfile").get("summary")).isEqualTo("Couchbase Developer");
     }
 
     @Test
     //Exercise 4b
-    public void should_not_allow_read_during_edition() throws Exception {
-        assertThat(userRepository.getAndLock("Antoine", "Michaud")).isNotNull();
-        assertThat(userRepository.getAndLock("Antoine", "Michaud")).isNull();
+    public void should_not_allow_read_during_edition() {
+        // Given
+        final User user = anUser().withUserProfile(
+                anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
+                        .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
+                                .build()).build()).build();
+
+        userRepository.insertUser(user);
+        final JsonDocument firstGetAndLock = userRepository.getAndLock("Antoine", "Michaud");
+
+        // When
+        final JsonDocument secondGetAndLock = userRepository.getAndLock("Antoine", "Michaud");
+
+        // Then
+        assertThat(firstGetAndLock).isNotNull();
+        assertThat(secondGetAndLock).isNull();
     }
 
     @Test
@@ -109,7 +136,7 @@ public class UserRepositoryTest {
         userRepository.insertBulkOfUsers(users);
     }
 
-    private User fromDocumentToUser(JsonDocument userJsonDocument) throws java.io.IOException {
+    private User fromDocumentToUser(JsonDocument userJsonDocument) throws IOException {
         return gson.getAdapter(User.class).fromJson(
                 userJsonDocument.content().toString());
     }
