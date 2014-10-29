@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Observable;
-import rx.functions.Func1;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,12 +65,8 @@ public class UserRepository {
 
         Observable
                 .from(userDocuments)
-                .flatMap(new Func1<JsonDocument, Observable<JsonDocument>>() {
-                    @Override
-                    public Observable<JsonDocument> call(JsonDocument document) {
-                        return asyncBucket.insert(document);
-                    }
-                }).subscribe();
+                .flatMap(asyncBucket::insert)
+                .subscribe();
     }
 
     //TODO Exercise 6.1
