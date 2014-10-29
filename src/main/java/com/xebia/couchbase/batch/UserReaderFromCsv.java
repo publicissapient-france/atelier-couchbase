@@ -19,7 +19,7 @@ import java.util.List;
 
 public class UserReaderFromCsv {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserReaderFromCsv.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserReaderFromCsv.class);
 
     public static List<User> getUsersFrom(String usersFileName) {
         final List<User> users = new ArrayList<>();
@@ -41,7 +41,7 @@ public class UserReaderFromCsv {
                                         .build()).build()).build());
             }
         } catch (IOException e) {
-            logger.error(String.format("The file %s couldn't be read.", usersFileName), e);
+            LOGGER.error(String.format("The file %s couldn't be read.", usersFileName), e);
         }
 
         return users;

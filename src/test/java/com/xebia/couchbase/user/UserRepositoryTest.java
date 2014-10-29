@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.xebia.couchbase.batch.UserReaderFromCsv;
 import com.xebia.couchbase.location.City;
 import com.xebia.couchbase.location.Country;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -36,6 +37,11 @@ public class UserRepositoryTest {
     @Before
     public void setUp() {
         publicotaurusBucket().bucketManager().flush();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        publicotaurusBucket().close();
     }
 
     @Test
