@@ -50,7 +50,7 @@ public class UserViewTest {
     }
 
     @Test
-    //Exercise 11
+    //Exercise 12
     public void should_disable_an_user() throws Exception {
         final String userName = "KLINE";
 

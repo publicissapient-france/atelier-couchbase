@@ -41,7 +41,7 @@ public class UserView {
                         .limit(documentsByPage)).allRows();
     }
 
-    //TODO Exercise 11
+    //TODO Exercise 12
     public static void disableUser(String lastName) {
         final ViewResult phoenixKlineSingletonBefore = publicotaurusBucket().query(
                 ViewQuery.from("moderator", "user").key(lastName));
