@@ -3,12 +3,11 @@ package com.xebia.couchbase.user;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.StringDocument;
 import com.couchbase.client.java.error.CASMismatchException;
+import com.couchbase.client.java.error.DocumentAlreadyExistsException;
 import com.google.gson.Gson;
 import com.xebia.couchbase.batch.UserReaderFromCsv;
 import com.xebia.couchbase.location.City;
 import com.xebia.couchbase.location.Country;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -34,16 +33,6 @@ public class UserRepositoryTest {
         gson = new Gson();
     }
 
-    @Before
-    public void setUp() {
-        publicotaurusBucket().bucketManager().flush();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        publicotaurusBucket().close();
-    }
-
     @Test
     //Exercise 3
     public void should_insert_user_and_retrieve_an_user_in_database() throws Exception {
@@ -53,10 +42,11 @@ public class UserRepositoryTest {
                         .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
                                 .build()).build()).build();
 
-        // When
-        userRepository.insertUser(user);
-
-        // Then
+        try {
+            userRepository.insertUser(user);
+        } catch (DocumentAlreadyExistsException e) {
+            // If the document already exists
+        }
         final JsonDocument resultDocument = userRepository.findUser("Antoine", "Michaud");
         final User resultUser = fromDocumentToUser(resultDocument);
         resultUser.getUserProfile().setSummary("Java Developer");
@@ -68,8 +58,6 @@ public class UserRepositoryTest {
     //Exercise 4a
     public void should_update_with_an_optimistic_lock() throws Exception {
         // Given
-        givenAnExistingUser();
-
         final JsonDocument user1 = userRepository.findUser("Antoine", "Michaud");
         final JsonDocument user2 = userRepository.findUser("Antoine", "Michaud");
         user1.content().getObject("userProfile").put("summary", "Couchbase Developer");
@@ -93,7 +81,6 @@ public class UserRepositoryTest {
     //Exercise 4b
     public void should_not_allow_read_during_edition() {
         // Given
-        givenAnExistingUser();
         final JsonDocument firstGetAndLock = userRepository.getAndLock("Antoine", "Michaud");
 
         // When
@@ -106,22 +93,21 @@ public class UserRepositoryTest {
 
     @Test
     //Exercise 5
-    public void should_count_number_of_document_retrieval() {
+    public void should_count_number_of_document_retrieval() throws Exception {
         // Given
-        givenAnExistingUser();
-        givenACounter(USER_DOCUMENT_RETRIEVAL_COUNT_ID);
-        int tryCount = 42;
+        final StringDocument userDocumentRetrievalCountDocument = publicotaurusBucket()
+                .get(USER_DOCUMENT_RETRIEVAL_COUNT_ID, StringDocument.class);
+
+        Long previousCount = previousCount(userDocumentRetrievalCountDocument);
 
         // When
-        for (int i = 0; i < tryCount; i++) {
-            userRepository.findUser("Antoine", "Michaud");
-        }
+        userRepository.findUser("Antoine", "Michaud");
 
         // Then
-        final Long eventualUserDocumentRetrievalCount = parseLong(publicotaurusBucket()
+        final Long newDocumentRetrievalCount = parseLong(publicotaurusBucket()
                 .get(USER_DOCUMENT_RETRIEVAL_COUNT_ID, StringDocument.class)
                 .content());
-        assertThat(eventualUserDocumentRetrievalCount).isEqualTo(tryCount);
+        assertThat(newDocumentRetrievalCount).isEqualTo(previousCount + 1);
     }
 
     @Test
@@ -131,22 +117,15 @@ public class UserRepositoryTest {
         userRepository.insertBulkOfUsers(users);
     }
 
-    private void givenAnExistingUser() {
-        final User user = anUser().withUserProfile(
-                anUserProfile().withFirstName("Antoine").withLastName("Michaud").withSummary("Java Developer")
-                        .withAddress(anAddress().withCity(new City("Paris", 1_000_000)).withCountry(new Country("France"))
-                                .build()).build()).build();
-
-        userRepository.insertUser(user);
-    }
-
-    private void givenACounter(String userDocumentRetrievalCountId) {
-        publicotaurusBucket().counter(userDocumentRetrievalCountId, 1, 0);
-    }
-
     private User fromDocumentToUser(JsonDocument userJsonDocument) throws IOException {
         return gson.getAdapter(User.class).fromJson(
                 userJsonDocument.content().toString());
+    }
+
+    private long previousCount(StringDocument userDocumentRetrievalCountDocument) {
+        return userDocumentRetrievalCountDocument != null
+                ? parseLong(userDocumentRetrievalCountDocument.content())
+                : -1L;
     }
 
 }
