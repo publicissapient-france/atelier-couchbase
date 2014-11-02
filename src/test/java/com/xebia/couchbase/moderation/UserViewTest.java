@@ -59,24 +59,4 @@ public class UserViewTest {
         assertThat(UserView.getInactiveUsers().allRows()).hasSize(2);
     }
 
-//    @Test
-//    public void should_retrieve_most_present_cities() throws Exception {
-//        // Given
-//
-//        // When
-//        Configuration.publicotaurusBucket()
-//                .async()
-//                .query(
-//                        select("*").from(Configuration.PUBLICOTAURUS_BUCKET_NAME).where(x("active").is(x(false))))
-//        .doOnNext(result -> {
-//            if (!result.success()) {
-//                System.err.println(result.error());
-//            }
-//        });
-//
-//        // Then
-//
-//    }
-
-
 }
