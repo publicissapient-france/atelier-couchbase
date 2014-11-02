@@ -199,9 +199,9 @@ $ sudo rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                 </p>
                 <p>Pour décrire une vue, on utilise le paradigme de map/reduce. Map est la fonction telle que select en sql. Reduce est une fonction d'aggrégation, comme un count. Ces deux fonctions s'écrivent en javascript.</p>
                 <p>Pour tester votre vue, vous pouvez sauvegarder votre fonction de map, puis cliquer sur "show results".</p>
-                <p>Maintenant que votre vue vous paraît satisfaisante, nous allons créer deux autres vues dans le même design document (un design document et un regroupement de vues, promues en mode "production" au même moment).</p>
+                <p>Maintenant que votre vue vous paraît satisfaisante, nous allons créer deux autres vues dans le même "design document" (un "design document" est un regroupement de vues promues en mode "production" au même moment).</p>
                 <p>Nos deux autres vues seront <strong>active_user</strong> et <strong>inactive_user</strong> et auront pour rôles de faire ce que leurs noms indiquent.</p>
-                <p>Une fois l'édition de vos vues terminées et testées, vous pouvez "publier" votre vue.</p>
+                <p>Une fois l'édition de vos vues terminée et testée, vous pouvez "publier" votre vue.</p>
 
                 <p class = "solution">
                 <a href = "http://docs.couchbase.com/couchbase-manual-2.0/#writing-views">documentation des vues</a>
@@ -218,9 +218,11 @@ $ sudo rpm -i couchbase-server-enterprise_2.5.1_x86_64.rpm
                 <p>Retournez dans votre code java faites passer le test de l'exercice 9. Ce test ne fait que vérifier que vous récupérez bien tous les éléments de la vue <em>inactive_user</em>.</p>
 
                 <h4>Petites aides dont vous aurez besoin :</h4>
-                <p><ul>
-                    <li><a href="http://docs.couchbase.com/developer/java-2.0/querying-views.html">Par ici</a> pour la doc. Attention, il se peut que des différences mineures avec l'API que vous utiliserez se soient glissées dans la doc de couchbase qui n'est pas complètement à jour.</li>
-                    <li>Dans les ViewQuery vous sera proposé de préciser le <strong>stale</strong> qui vous intéressera sûrement. Vous trouverez des informations sur ce point dans <a href="http://docs.couchbase.com/admin/admin/Views/views-index-updates.html">cette page</a> de la doc.</li>
+                <p>
+                    <ul>
+                        <li><a href="http://docs.couchbase.com/developer/java-2.0/querying-views.html">Par ici</a> pour la doc. Attention, il se peut que des différences mineures avec l'API que vous utiliserez se soient glissées dans la doc de couchbase qui n'est pas complètement à jour.</li>
+                        <li>Dans les ViewQuery, il vous sera proposé de préciser le <strong>stale</strong> qui vous intéressera sûrement. Vous trouverez des informations sur ce point dans <a href="http://docs.couchbase.com/admin/admin/Views/views-index-updates.html">cette page</a> de la doc.</li>
+                    </ul>
                 </p>
 
                 <h2>Exercice 10 : Pagination</h2>
