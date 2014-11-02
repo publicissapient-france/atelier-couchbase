@@ -17,7 +17,7 @@ inactive_user :
     -map :
         function (doc, meta) {
           var userProfile = doc.userProfile;
-          if (!doc.active) {
+          if (doc.active === false) {
             var output = {
               userId: meta.id,
               userName: userProfile.firstName + " " + userProfile.lastName,
@@ -28,7 +28,7 @@ inactive_user :
           }
         }
 
-number_of_active_user :
+number_of_inactive_user :
     -map :
         function (doc, meta) {
           var userProfile = doc.userProfile;
