@@ -1,18 +1,16 @@
 package com.xebia.couchbase.user;
 
-import com.couchbase.client.java.AsyncBucket;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
 import com.couchbase.client.java.transcoder.JsonTranscoder;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rx.Observable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.xebia.couchbase.Configuration.publicotaurusBucket;
+import static com.xebia.couchbase.Configuration.reinitConnection;
 
 public class UserRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRepository.class);
@@ -56,17 +54,16 @@ public class UserRepository {
 
     //TODO Exercise 6.2
     public void insertBulkOfUsers(List<User> users) {
-        final List<JsonDocument> userDocuments = users
-                .stream()
-                .map(this::userToDocument)
-                .collect(Collectors.toList());
-
-        final AsyncBucket asyncBucket = publicotaurusBucket().async();
-
-        Observable
-                .from(userDocuments)
-                .flatMap(asyncBucket::insert)
-                .subscribe();
+        for (User user : users) {
+            try {
+                upsertUser(user);
+            } catch (Exception e) {
+                LOGGER.error("Client planté. Réinitialisation de la connexion à la base.");
+                reinitConnection();
+                // Reprise du document planté après réinitialisation de la connexion
+                upsertUser(user);
+            }
+        }
     }
 
     //TODO Exercise 6.1
