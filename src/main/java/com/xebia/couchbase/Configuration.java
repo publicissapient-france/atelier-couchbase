@@ -29,6 +29,10 @@ public class Configuration {
                 .queryTimeout(10_000).build();
     }
 
+    public static Bucket defaultBucket() {
+        return getBucketOfName(DEFAULT_BUCKET, DEFAULT_BUCKET_NAME);
+    }
+
     public static Bucket publicotaurusBucket() {
         return getBucketOfName(PUBLICOTAURUS_BUCKET, PUBLICOTAURUS_BUCKET_NAME);
     }
@@ -37,10 +41,6 @@ public class Configuration {
     public static void reinitConnection() {
         // Create the connection to the cluster using CouchbaseCluster.create() method.
         couchbaseCluster = CouchbaseCluster.create(COUCHBASE_ENVIRONMENT, COUCHBASE_SERVER_ADDRESS);
-    }
-
-    public static Bucket defaultBucket() {
-        return getBucketOfName(DEFAULT_BUCKET, DEFAULT_BUCKET_NAME);
     }
 
     /**
