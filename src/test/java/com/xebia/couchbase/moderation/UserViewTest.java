@@ -22,12 +22,12 @@ public class UserViewTest {
         // Then
         final ViewRow userViewRow = getFirst(inactiveUsers.allRows(), null);
         assertThat(userViewRow).isNotNull();
-        assertThat(userViewRow.key()).isEqualTo("VINCENT");
+        assertThat(userViewRow.key()).isEqualTo("TURNER");
 
         Map<String, Object> expectedJsonMap = ImmutableMap.<String, Object>builder()
-                .put("userId", "user::adrian_vincent")
-                .put("userName", "ADRIAN VINCENT")
-                .put("cityName", "San Diego")
+                .put("userId", "user::claire_turner")
+                .put("userName", "Claire TURNER")
+                .put("cityName", "Dallas")
                 .put("active", false)
                 .build();
         assertThat(((JsonObject) userViewRow.value()).toMap()).isEqualTo(expectedJsonMap);
@@ -37,22 +37,22 @@ public class UserViewTest {
     //Exercice 10
     public void should_paginate() throws Exception {
         // When
-        final UserView activeUserView = UserView.getPaginatedActiveUsers(100);
+        final UserView activeUserView = UserView.getPaginatedActiveUsers(10);
 
         // Then
         ViewRow userViewRow = getFirst(activeUserView.nextPage(), null);
         assertThat(userViewRow).isNotNull();
-        assertThat(userViewRow.key()).isEqualTo("ABBOTT");
+        assertThat(userViewRow.key()).isEqualTo("ADAMS");
 
         userViewRow = getFirst(activeUserView.nextPage(), null);
         assertThat(userViewRow).isNotNull();
-        assertThat(userViewRow.key()).isEqualTo("BRADY");
+        assertThat(userViewRow.key()).isEqualTo("BUTLER");
     }
 
     @Test
     //Exercise 12
     public void should_disable_an_user() throws Exception {
-        final String userName = "KLINE";
+        final String userName = "DIAZ";
 
         UserView.disableUser(userName);
 

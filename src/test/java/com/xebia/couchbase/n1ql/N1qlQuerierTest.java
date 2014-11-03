@@ -9,15 +9,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class N1qlQuerierTest {
 
     @Test
-    //Exercise 11
     public void should_retrieve_most_present_cities() throws Exception {
         // Given
         final N1qlQuerier n1qlQuerier = new N1qlQuerier();
 
         // When
         final List<String> cityWithInhabitantsInitials = n1qlQuerier.getCityWithInhabitantsInitials("A", "W");
-        // Then
 
+        // Then
         assertThat(cityWithInhabitantsInitials).containsOnly("San Antonio", "Houston");
     }
 

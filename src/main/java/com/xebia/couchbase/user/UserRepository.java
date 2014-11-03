@@ -50,7 +50,7 @@ public class UserRepository {
     }
 
     //TODO Exercise 6
-    public void insertBulkOfUsers(List<User> users) {
+    public void insertManyUsers(List<User> users) {
 
     }
 
