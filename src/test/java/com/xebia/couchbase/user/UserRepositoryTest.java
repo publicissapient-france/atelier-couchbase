@@ -112,9 +112,9 @@ public class UserRepositoryTest {
 
     @Test
     //Exercise 6
-    public void should_insert_a_bulk_of_users() throws Exception {
+    public void should_insert_many_users() throws Exception {
         final List<User> users = UserReaderFromCsv.getUsersFrom("users.csv");
-        userRepository.insertBulkOfUsers(users);
+        userRepository.insertManyUsers(users);
     }
 
     private User fromDocumentToUser(JsonDocument userJsonDocument) throws IOException {

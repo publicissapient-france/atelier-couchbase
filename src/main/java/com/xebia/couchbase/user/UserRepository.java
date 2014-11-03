@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import static com.xebia.couchbase.Configuration.publicotaurusBucket;
-import static com.xebia.couchbase.Configuration.reinitConnection;
 
 public class UserRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRepository.class);
@@ -53,16 +52,9 @@ public class UserRepository {
     }
 
     //TODO Exercise 6.2
-    public void insertBulkOfUsers(List<User> users) {
+    public void insertManyUsers(List<User> users) {
         for (User user : users) {
-            try {
-                upsertUser(user);
-            } catch (Exception e) {
-                LOGGER.error("Client planté. Réinitialisation de la connexion à la base.");
-                reinitConnection();
-                // Reprise du document planté après réinitialisation de la connexion
-                upsertUser(user);
-            }
+            upsertUser(user);
         }
     }
 
