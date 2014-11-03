@@ -48,6 +48,9 @@ public class UserRepositoryTest {
             // If the document already exists
         }
         final JsonDocument resultDocument = userRepository.findUser("Antoine", "Michaud");
+
+        assertThat(resultDocument).as("document from CouchBase is null, please implement userRepository.findUser().").isNotNull();
+
         final User resultUser = fromDocumentToUser(resultDocument);
         resultUser.getUserProfile().setSummary("Java Developer");
         assertThat(resultUser).isEqualTo(user);
