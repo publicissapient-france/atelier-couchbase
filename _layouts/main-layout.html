@@ -221,6 +221,7 @@ $ sudo rpm -i couchbase-server-enterprise-3.0.0-centos6.x86_64.rpm
 
                 <h2>Exercice 8 : Modifiez un design document</h2>
                 <p>Vous souhaitez maintenant ajouter une vue <strong>number_of_inactive_users</strong> pour compter le nombre d'utilisateurs inactifs. Pour cela, vous devez copier le design document en mode développement.</p>
+                <p>Pour tester le résultat, vous devrez par contre re-publier votre vue avant de cliquer sur 'Show results'</p>
 
                 <p class="solution">
                 Pour cela, vous pouvez émettre un document vide dans la partie <strong>map</strong> et utiliser la fonction prédéfinie _count dans la partie <strong>reduce</strong>
