@@ -12,13 +12,14 @@ public class Configuration {
     public static final String COUCHBASE_SERVER_ADDRESS = "127.0.0.1";
     public static final CouchbaseEnvironment COUCHBASE_ENVIRONMENT = getCouchbaseEnvironment();
 
+    public static CouchbaseCluster couchbaseCluster =
+            CouchbaseCluster.create(COUCHBASE_ENVIRONMENT, COUCHBASE_SERVER_ADDRESS);
+
     private static final String DEFAULT_BUCKET_NAME = "default";
     private static Bucket DEFAULT_BUCKET = null;
 
     public static final String PUBLICOTAURUS_BUCKET_NAME = "publicotaurus";
     private static Bucket PUBLICOTAURUS_BUCKET = null;
-    public static CouchbaseCluster couchbaseCluster =
-            CouchbaseCluster.create(COUCHBASE_ENVIRONMENT, COUCHBASE_SERVER_ADDRESS);
 
     private static DefaultCouchbaseEnvironment getCouchbaseEnvironment() {
         return DefaultCouchbaseEnvironment.builder()
