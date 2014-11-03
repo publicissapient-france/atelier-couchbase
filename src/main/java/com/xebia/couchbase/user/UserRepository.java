@@ -54,11 +54,19 @@ public class UserRepository {
 
     }
 
-    //TODO Exercise 3.1
+    // Exercise 3.1
     private JsonDocument userToDocument(User user) {
-        // Transform user to document thanks to a Gson object and a JsonTranscoder object
-        // (both available in this class)
-        return null;
+        // This method transforms user to document thanks to a Gson object and a JsonTranscoder object
+        final JsonObject userJsonObject;
+        try {
+            userJsonObject = jsonTranscoder.stringToJsonObject(gson.toJson(user));
+            final UserProfile userProfile = user.getUserProfile();
+            final String userDocumentId = computeUserId(userProfile.getFirstName(), userProfile.getLastName());
+            return JsonDocument.create(userDocumentId, userJsonObject);
+        } catch (Exception e) {
+            LOGGER.error("Error during json transformation", e);
+            return null;
+        }
     }
 
     String computeUserId(String firstName, String lastName) {
