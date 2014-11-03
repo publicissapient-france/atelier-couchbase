@@ -15,8 +15,8 @@ public class N1qlQuerierTest {
 
         // When
         final List<String> cityWithInhabitantsInitials = n1qlQuerier.getCityWithInhabitantsInitials("A", "W");
-        // Then
 
+        // Then
         assertThat(cityWithInhabitantsInitials).containsOnly("San Antonio", "Houston");
     }
 
