@@ -12,7 +12,7 @@ import rx.Observable;
 import rx.functions.Action1;
 
 public class AsyncUserRepository {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserRepository.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AsyncUserRepository.class);
     private static final AsyncBucket ASYNC_BUCKET = Configuration.publicotaurusBucket().async();
     private static final String USER_DOCUMENT_PREFIX = "user::";
 
