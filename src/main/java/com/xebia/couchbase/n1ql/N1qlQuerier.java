@@ -8,12 +8,9 @@ import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.client.java.query.QueryRow;
 
 import java.util.List;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static com.couchbase.client.java.query.Select.selectDistinct;
 import static com.couchbase.client.java.query.dsl.Expression.x;
-import static java.util.stream.Collectors.toList;
 
 public class N1qlQuerier {
 
