@@ -39,17 +39,7 @@ public class N1qlQuerier {
     //TODO Exercise 11
     // Don't use the Configuration class, but the constants defined in this class.
     public List<String> getCityWithInhabitantsInitials(String firstNameBegin, String lastNameBegin) {
-        QueryResult queryResult = N1QL_PUBLICOTAURUS_BUCKET
-                .query(
-                        selectDistinct("userProfile.address.city.name as cityName")
-                                .from("publicotaurus")
-                                .where(x("userProfile.firstName").like(x("'" + firstNameBegin + "%'"))
-                                        .and(x("userProfile.lastName").like(x("'" + lastNameBegin + "%'")))));
-
-        Iterable<QueryRow> queryRowIterable = queryResult::rows;
-        Stream<QueryRow> queryRowStream = StreamSupport.stream(queryRowIterable.spliterator(), false);
-
-        return queryRowStream.map(city -> city.value().getString("cityName")).collect(toList());
+        return null;
     }
 
 }
