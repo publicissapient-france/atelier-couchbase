@@ -87,7 +87,7 @@ public class UserRepository {
         }
     }
 
-    private String computeUserId(String firstName, String lastName) {
+    String computeUserId(String firstName, String lastName) {
         return String.format("%s%s_%s", USER_DOCUMENT_PREFIX, firstName.toLowerCase(), lastName.toLowerCase());
     }
 }
