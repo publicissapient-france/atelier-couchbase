@@ -69,6 +69,21 @@ $ mvn clean compile
                     <li>Téléchargez et installez Couchbase Server 3.0, avec rpm -i</li>
                 </ul>
                 <div class="solution">
+                
+<h4>Pour windows : </h4>
+<ul>
+<li>Si vous ne l'avez pas, récupérez <a href="http://the.earth.li/~sgtatham/putty/latest/x86/putty.exe">PuTTY</a></li>
+<li>Entrez l'adresse <em>{{page.group}}-couchbase-workshop.aws.xebiatechevent.info</em> à l'emplacement de l'encadré rouge ci-dessous</li>
+</ul>
+<img src="../images/putty_ip.png" alt="putty ip"/>
+<ul>
+<li>Suivez ensuite les screenshots suivants :</li>
+</ul>
+<img src="../images/putty_user.png" alt="putty2"/>
+<img src="../images/putty_key1.png" alt="putty3"/>
+<img src="../images/putty_key2.png" alt="putty4"/>
+<img src="../images/putty_open_connection.png" alt="putty5"/>
+<h4>Pour Linux et Mac :</h4>
 {% highlight bash %}
 $ chmod 600 key/couchbase-xke.pem
 $ ssh -i key/couchbase-xke.pem ec2-user@{{page.group}}-couchbase-workshop.aws.xebiatechevent.info
