@@ -85,7 +85,7 @@ $ sudo rpm -i couchbase-server-enterprise-3.0.0-centos6.x86_64.rpm
                 </ul>
                 <p>Inutile de créer les samples proposés, nous allons créer les nôtres plus tard dans cet atelier.
 
-                <p>Vous créez le bucket default en changeant la configuration suivante : </p>
+                <p>Vous créez le bucket "<strong>default</strong>" en changeant la configuration suivante : </p>
 
                 <ul>
                     <li>100MO de mémoire allouée par noeud (100MO = minimum requis par couchbase pour un bucket)</li>
@@ -119,7 +119,7 @@ $ sudo rpm -i couchbase-server-enterprise-3.0.0-centos6.x86_64.rpm
                 </ul>
 
                 <h2>Exercice 2 : Création d'un bucket pour l'application</h2>
-                <p>Pour l'instant, l'application ne possède pas de bucket dédié. Vous créez maintenant le bucket "publicotaurus".
+                <p>Pour l'instant, l'application ne possède pas de bucket dédié. Vous créez maintenant le bucket "<strong>publicotaurus</strong>".
 
                 <h4>Votre mission :</h4>
                 <ul>
@@ -143,7 +143,7 @@ $ sudo rpm -i couchbase-server-enterprise-3.0.0-centos6.x86_64.rpm
                 </p>
                 <h4>Votre mission :</h4>
                 <ul>
-                    <li>Faites passer le test <strong>UserRepositoryTest.should_update_with_an_optimistic_lock</strong></li>
+                    <li>Faites passer le test <strong>UserRepositoryTest.should_update_with_an_optimistic_lock()</strong></li>
                 </ul>
 
                 <p class="solution">
@@ -156,7 +156,7 @@ $ sudo rpm -i couchbase-server-enterprise-3.0.0-centos6.x86_64.rpm
                 <p>Vous souhaitez cette fois carrément bloquer le document en lecture à partir du moment où vous-même le lisez.</p>
                 <h4>Votre mission :</h4>
                 <ul>
-                    <li>Faites passer le test <strong>UserRepositoryTest.should_not_allow_read_during_edition</strong></li>
+                    <li>Faites passer le test <strong>UserRepositoryTest.should_not_allow_read_during_edition()</strong></li>
                 </ul>
                 <p class="solution">
                 Vous pouvez utiliser la méthode <strong>Bucket.getAndLock()</strong>                
@@ -181,22 +181,20 @@ $ sudo rpm -i couchbase-server-enterprise-3.0.0-centos6.x86_64.rpm
                     <li>Lancer le test "should_insert_and_compare_bulk_of_users" pour lancer l'import des utilisateurs.</li>
                     <li>Vous obtenez une erreur. C'est un bug du sdk 2.0. Le workaround que nous vous proposons est de réinitialiser la connexion sur réception d'une exception dans la méthode <strong>insertBulkOfUsers()</strong></li>
                 </ul>
-                </p>
 
                 <h2>Exercice 7 : Créez vos premières vue</h2>
                 <p>Les profils utilisateurs doivent pouvoir être administrés facilement par les modérateurs. Mais il est inutile de faire remonter les profils entiers pour cela...</p>
                 <p>
                 Rendez vous dans la console web Couchbase et créez une vue permettant de déterminer :
                 <ul> 
-                    <li>le nom de famille de l'utilisateur (stocké dans la clé de la vue)</li>
-                    <li>l'id de l'utilisateur (userId);</li>
-                    <li>les prénoms/noms de l'utilisateur (dans userName);</li>
-                    <li>la ville (cityName);</li> 
-                    <li>si ce dernier est actif ou non (active);</li>
+                    <li>le nom de famille de l'utilisateur (qui servira de clé pour la vue)</li>
+                    <li>l'id de l'utilisateur (userId)</li>
+                    <li>les prénoms/noms de l'utilisateur (dans userName)</li>
+                    <li>la ville (cityName)</li>
+                    <li>si ce dernier est actif ou non (active)</li>
                 </ul>
 
                 Vous appellerez votre vue <strong>user</strong>. Vous devrez tout d'abord créer une vue en mode développement afin de tester votre vue.
-                </p>
                 <p>Pour décrire une vue, on utilise le paradigme de map/reduce. Map est la fonction telle que select en sql. Reduce est une fonction d'aggrégation, comme un count. Ces deux fonctions s'écrivent en javascript.</p>
                 <p>Pour tester votre vue, vous pouvez sauvegarder votre fonction de map, puis cliquer sur "show results".</p>
                 <p>Maintenant que votre vue vous paraît satisfaisante, nous allons créer deux autres vues dans le même "design document" (un "design document" est un regroupement de vues promues en mode "production" au même moment).</p>
@@ -209,8 +207,9 @@ $ sudo rpm -i couchbase-server-enterprise-3.0.0-centos6.x86_64.rpm
 
                 <h2>Exercice 8 : Modifiez un design document</h2>
                 <p>Vous souhaitez maintenant ajouter une vue <strong>number_of_inactive_users</strong> pour compter le nombre d'utilisateurs inactifs. Pour cela, vous devez copier le design document en mode développement.</p>
+
                 <p class="solution">
-                Pour cela, vous pouvez émettre un document vide et utiliser la fonction prédéfinie _count dans la partie reduce
+                Pour cela, vous pouvez émettre un document vide dans la partie <strong>map</strong> et utiliser la fonction prédéfinie _count dans la partie <strong>reduce</strong>
                 </p>
 
                 <h2>Exercice 9 : Les vues dans l'application</h2>
