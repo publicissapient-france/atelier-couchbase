@@ -22,12 +22,12 @@ public class UserViewTest {
         // Then
         final ViewRow userViewRow = getFirst(inactiveUsers.allRows(), null);
         assertThat(userViewRow).isNotNull();
-        assertThat(userViewRow.key()).isEqualTo("TURNER");
+        assertThat(userViewRow.key()).isEqualTo("DIAZ");
 
         Map<String, Object> expectedJsonMap = ImmutableMap.<String, Object>builder()
-                .put("userId", "user::claire_turner")
-                .put("userName", "Claire TURNER")
-                .put("cityName", "Dallas")
+                .put("userId", "user::skylar_diaz")
+                .put("userName", "Skylar DIAZ")
+                .put("cityName", "Chicago")
                 .put("active", false)
                 .build();
         assertThat(((JsonObject) userViewRow.value()).toMap()).isEqualTo(expectedJsonMap);
@@ -52,7 +52,7 @@ public class UserViewTest {
     @Test
     //Exercise 12
     public void should_disable_an_user() throws Exception {
-        final String userName = "KLINE";
+        final String userName = "DIAZ";
 
         UserView.disableUser(userName);
 
