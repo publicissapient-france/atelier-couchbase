@@ -37,12 +37,6 @@ public class Configuration {
         return getBucketOfName(PUBLICOTAURUS_BUCKET, PUBLICOTAURUS_BUCKET_NAME);
     }
 
-    //TODO Exercise 1.2
-    public static void reinitConnection() {
-        // Create the connection to the cluster using CouchbaseCluster.create() method.
-        couchbaseCluster = CouchbaseCluster.create(COUCHBASE_ENVIRONMENT, COUCHBASE_SERVER_ADDRESS);
-    }
-
     /**
      * Get or init the connection with a bucket
      *
@@ -50,7 +44,7 @@ public class Configuration {
      * @param bucketName the bucket name, to be able to initiate the connection
      * @return bucket
      */
-    //TODO Exercise 1.3
+    //TODO Exercise 1.2
     private static Bucket getBucketOfName(Bucket bucket, String bucketName) {
         // Should return the PUBLICOTAURUS_BUCKET constant and init it if needed
         if (bucket == null) {

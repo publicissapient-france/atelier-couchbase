@@ -113,8 +113,18 @@ public class UserRepositoryTest {
     @Test
     //Exercise 6
     public void should_insert_many_users() throws Exception {
+        // Given
         final List<User> users = UserReaderFromCsv.getUsersFrom("users.csv");
+
+        // When
         userRepository.insertManyUsers(users);
+
+        // Then
+        for (User user : users) {
+            assertThat(userRepository.findUser(
+                    user.getUserProfile().getFirstName(),
+                    user.getUserProfile().getLastName())).isNotNull();
+        }
     }
 
     private User fromDocumentToUser(JsonDocument userJsonDocument) throws IOException {
