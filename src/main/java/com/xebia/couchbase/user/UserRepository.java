@@ -3,6 +3,7 @@ package com.xebia.couchbase.user;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
 import com.couchbase.client.java.transcoder.JsonTranscoder;
+import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,9 +54,14 @@ public class UserRepository {
 
     //TODO Exercise 6.2
     public void insertManyUsers(List<User> users) {
+        Stopwatch stopwatch = Stopwatch.createStarted();
+
         for (User user : users) {
             upsertUser(user);
         }
+
+        stopwatch.stop();
+        LOGGER.info("Insert many sync time : " + stopwatch);
     }
 
     //TODO Exercise 6.1
